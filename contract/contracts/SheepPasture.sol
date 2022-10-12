@@ -8,6 +8,9 @@ contract SheepPasture {
     struct Sheep {
         string name;
         uint16 level;
+        uint64 lastFeedTime;
+        uint8 concecutiveFeedingDays;
+        bool isAlive;
     }
 
     Sheep[] public sheeps;
@@ -21,9 +24,29 @@ contract SheepPasture {
 
     function buySheep(string memory _name) public payable {
         require(msg.value == sheepCost);
-        sheeps.push(Sheep(_name, 0));
+        sheeps.push(Sheep(_name, 0, uint64(block.timestamp), 0, true));
         uint id = sheeps.length - 1;
         sheepToOwner[id] = msg.sender;
         sheepCount++;
+    }
+
+    function feed(uint _sheepId) public {
+        require(sheepToOwner[_sheepId] == msg.sender);
+        Sheep storage sheep = sheeps[_sheepId];
+        require(sheep.isAlive);
+        require((block.timestamp - sheep.lastFeedTime) > 1 days);
+
+        if ((block.timestamp - sheep.lastFeedTime) > 3 days) {
+            sheep.isAlive = false;
+            return;
+        }
+
+        sheep.lastFeedTime = uint64(block.timestamp);
+        sheep.concecutiveFeedingDays++;
+
+        if (sheep.concecutiveFeedingDays == 7) {
+            sheep.level++;
+            sheep.concecutiveFeedingDays = 0;
+        }
     }
 }
