@@ -30,8 +30,12 @@ contract SheepPasture {
         sheepCount++;
     }
 
-    function feed(uint _sheepId) public {
+    modifier onlySheepOwner(uint _sheepId) {
         require(sheepToOwner[_sheepId] == msg.sender);
+        _;
+    }
+
+    function feed(uint _sheepId) public onlySheepOwner(_sheepId) {
         Sheep storage sheep = sheeps[_sheepId];
         require(sheep.isAlive);
         require((block.timestamp - sheep.lastFeedTime) > 1 days);
