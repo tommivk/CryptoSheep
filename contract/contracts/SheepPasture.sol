@@ -11,7 +11,6 @@ contract SheepPasture {
     string neutralFace = 'M4 7h1M6 7h1M3 9h5"';
     string sadFace = 'M4 7h1M6 7h1M3 9h5M3 10h1M7 10h1"';
 
-    uint public sheepCount;
     uint public sheepCost;
 
     struct Sheep {
@@ -27,7 +26,6 @@ contract SheepPasture {
     mapping(uint => address) public sheepToOwner;
 
     constructor(uint _sheepCost) {
-        sheepCount = 0;
         sheepCost = _sheepCost;
     }
 
@@ -36,7 +34,6 @@ contract SheepPasture {
         sheeps.push(Sheep(_name, 0, uint64(block.timestamp), 0, true));
         uint id = sheeps.length - 1;
         sheepToOwner[id] = msg.sender;
-        sheepCount++;
     }
 
     modifier onlySheepOwner(uint _sheepId) {
