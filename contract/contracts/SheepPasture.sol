@@ -24,6 +24,7 @@ contract SheepPasture {
     Sheep[] public sheeps;
 
     mapping(uint => address) public sheepToOwner;
+    mapping(address => uint) public ownerSheepCount;
 
     constructor(uint _sheepCost) {
         sheepCost = _sheepCost;
@@ -34,6 +35,7 @@ contract SheepPasture {
         sheeps.push(Sheep(_name, 0, uint64(block.timestamp), 0, true));
         uint id = sheeps.length - 1;
         sheepToOwner[id] = msg.sender;
+        ownerSheepCount[msg.sender]++;
     }
 
     modifier onlySheepOwner(uint _sheepId) {
