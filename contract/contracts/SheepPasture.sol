@@ -12,6 +12,7 @@ contract SheepPasture {
     string sadFace = 'M4 7h1M6 7h1M3 9h5M3 10h1M7 10h1"';
 
     uint public sheepCost;
+    uint feedingDeadline = 3 days;
 
     struct Sheep {
         string name;
@@ -48,7 +49,7 @@ contract SheepPasture {
         require(sheep.isAlive);
         require((block.timestamp - sheep.lastFeedTime) > 1 days);
 
-        if ((block.timestamp - sheep.lastFeedTime) > 3 days) {
+        if ((block.timestamp - sheep.lastFeedTime) > feedingDeadline) {
             sheep.isAlive = false;
             return;
         }
