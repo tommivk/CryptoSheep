@@ -96,4 +96,24 @@ describe("Sheep tests", () => {
       sheeps.connect(accountB).feed(0)
     ).to.be.revertedWithoutReason();
   });
+
+  it("Getting all owned sheeps should return correct data", async () => {
+    const [_accountA, accountB] = await ethers.getSigners();
+    const Sheeps = await ethers.getContractFactory("SheepPasture");
+    const sheeps = await Sheeps.deploy(200);
+
+    await sheeps.buySheep("sheep", { value: 200 });
+    await sheeps.buySheep("sheep2", { value: 200 });
+    await sheeps.connect(accountB).buySheep("sheep3", { value: 200 });
+
+    const sheepsA = await sheeps.getOwnedSheeps();
+    const sheepsB = await sheeps.connect(accountB).getOwnedSheeps();
+
+    expect(sheepsA.length).to.equal(2);
+    expect(sheepsA[0].name).to.equal("sheep");
+    expect(sheepsA[1].name).to.equal("sheep2");
+
+    expect(sheepsB.length).to.equal(1);
+    expect(sheepsB[0].name).to.equal("sheep3");
+  });
 });
