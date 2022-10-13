@@ -75,4 +75,32 @@ contract SheepPasture {
         }
         return string.concat(start, fill, sadFace, end);
     }
+
+    function getOwnedSheeps() public view returns (Sheep[] memory) {
+        uint sheepCount = ownerSheepCount[msg.sender];
+        Sheep[] memory result = new Sheep[](sheepCount);
+
+        uint index = 0;
+
+        for (uint i = 0; i < sheeps.length; i++) {
+            if (sheepToOwner[i] == msg.sender) {
+                Sheep memory sheep = sheeps[i];
+                sheep.isAlive = sheep.isAlive ? checkIsAlive(sheep) : false;
+                result[index] = sheep;
+                index++;
+            }
+            if (index == sheepCount) {
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    function checkIsAlive(Sheep memory _sheep) private view returns (bool) {
+        if ((block.timestamp - _sheep.lastFeedTime) > feedingDeadline) {
+            return false;
+        }
+        return true;
+    }
 }
