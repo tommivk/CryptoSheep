@@ -62,4 +62,17 @@ contract SheepPasture {
             sheep.concecutiveFeedingDays = 0;
         }
     }
+
+    function getSheepSVG(uint _sheepId) public view returns (string memory) {
+        require(_sheepId < sheeps.length);
+        Sheep memory sheep = sheeps[_sheepId];
+
+        if ((block.timestamp - sheep.lastFeedTime) < 1 days) {
+            return string.concat(start, fill, happyFace, end);
+        }
+        if ((block.timestamp - sheep.lastFeedTime) < 2 days) {
+            return string.concat(start, fill, neutralFace, end);
+        }
+        return string.concat(start, fill, sadFace, end);
+    }
 }
