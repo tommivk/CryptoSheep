@@ -8,9 +8,6 @@ describe("Sheep tests", () => {
 
     const sheepCost = await sheeps.sheepCost();
     expect(sheepCost).to.equal(200);
-
-    const sheepCount = await sheeps.sheepCount();
-    expect(sheepCount).to.equal(0);
   });
 
   it("Buying sheep should fail when insufficient amount is sent", async () => {
