@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 
 describe("Sheep tests", () => {
   it("Constructor should set correct data", async () => {
-    const Sheeps = await ethers.getContractFactory("SheepPasture");
+    const Sheeps = await ethers.getContractFactory("SheepContract");
     const sheeps = await Sheeps.deploy(200);
 
     const sheepCost = await sheeps.sheepCost();
@@ -11,7 +11,7 @@ describe("Sheep tests", () => {
   });
 
   it("Buying sheep should fail when insufficient amount is sent", async () => {
-    const Sheeps = await ethers.getContractFactory("SheepPasture");
+    const Sheeps = await ethers.getContractFactory("SheepContract");
     const sheeps = await Sheeps.deploy(200);
 
     await expect(sheeps.buySheep("mySheep")).to.be.revertedWithoutReason();
@@ -25,7 +25,7 @@ describe("Sheep tests", () => {
   it("Buying sheep should work and set correct sheep data", async () => {
     const [account] = await ethers.getSigners();
 
-    const Sheeps = await ethers.getContractFactory("SheepPasture");
+    const Sheeps = await ethers.getContractFactory("SheepContract");
     const sheeps = await Sheeps.deploy(200);
 
     await sheeps.buySheep("mySheep", { value: 200 });
@@ -48,7 +48,7 @@ describe("Sheep tests", () => {
   it("Feeding sheep should only be possible after 1 day", async () => {
     const oneDay = 1 * 24 * 60 * 60;
 
-    const Sheeps = await ethers.getContractFactory("SheepPasture");
+    const Sheeps = await ethers.getContractFactory("SheepContract");
     const sheeps = await Sheeps.deploy(200);
     await sheeps.buySheep("mySheep", { value: 200 });
 
@@ -69,7 +69,7 @@ describe("Sheep tests", () => {
   it("Sheep should die if it has not been feeded in 3 days", async () => {
     const threeDays = 3 * 24 * 60 * 60;
 
-    const Sheeps = await ethers.getContractFactory("SheepPasture");
+    const Sheeps = await ethers.getContractFactory("SheepContract");
     const sheeps = await Sheeps.deploy(200);
     await sheeps.buySheep("mySheep", { value: 200 });
 
@@ -84,7 +84,7 @@ describe("Sheep tests", () => {
 
   it("Should not be possible to feed that you dont own", async () => {
     const [_accountA, accountB] = await ethers.getSigners();
-    const Sheeps = await ethers.getContractFactory("SheepPasture");
+    const Sheeps = await ethers.getContractFactory("SheepContract");
     const sheeps = await Sheeps.deploy(200);
     await sheeps.buySheep("mySheep", { value: 200 });
 
@@ -99,7 +99,7 @@ describe("Sheep tests", () => {
 
   it("Getting all owned sheeps should return correct data", async () => {
     const [_accountA, accountB] = await ethers.getSigners();
-    const Sheeps = await ethers.getContractFactory("SheepPasture");
+    const Sheeps = await ethers.getContractFactory("SheepContract");
     const sheeps = await Sheeps.deploy(200);
 
     await sheeps.buySheep("sheep", { value: 200 });
