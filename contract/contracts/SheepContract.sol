@@ -32,11 +32,28 @@ contract SheepContract is SheepPasture, ERC721 {
         uint256 _tokenId
     ) external payable {}
 
+    function _transfer(
+        address _from,
+        address _to,
+        uint _tokenId
+    ) private {
+        sheepToOwner[_tokenId] = _to;
+        ownerSheepCount[_from]--;
+        ownerSheepCount[_to]++;
+        emit Transfer(_from, _to, _tokenId);
+    }
+
     function transferFrom(
         address _from,
         address _to,
         uint256 _tokenId
-    ) external payable {}
+    ) external payable {
+        require(
+            sheepToOwner[_tokenId] == msg.sender ||
+                approvals[_tokenId] == msg.sender
+        );
+        _transfer(_from, _to, _tokenId);
+    }
 
     function approve(address _approved, uint256 _tokenId)
         external
