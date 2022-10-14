@@ -20,10 +20,6 @@ contract SheepPasture is SheepSVG {
     mapping(uint => address) public sheepToOwner;
     mapping(address => uint) public ownerSheepCount;
 
-    constructor(uint _sheepCost) {
-        sheepCost = _sheepCost;
-    }
-
     function buySheep(string memory _name) public payable {
         require(msg.value == sheepCost);
         sheeps.push(Sheep(_name, 0, uint64(block.timestamp), 0, true));

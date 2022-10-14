@@ -5,6 +5,10 @@ import "./SheepPasture.sol";
 import "./ERC721.sol";
 
 contract SheepContract is SheepPasture, ERC721 {
+    constructor(uint _sheepCost) {
+        sheepCost = _sheepCost;
+    }
+
     function balanceOf(address _owner) external view returns (uint256) {}
 
     function ownerOf(uint256 _tokenId) external view returns (address) {}
