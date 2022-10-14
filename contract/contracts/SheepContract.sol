@@ -5,6 +5,8 @@ import "./SheepPasture.sol";
 import "./ERC721.sol";
 
 contract SheepContract is SheepPasture, ERC721 {
+    mapping(uint => address) approvals;
+
     constructor(uint _sheepCost) {
         sheepCost = _sheepCost;
     }
