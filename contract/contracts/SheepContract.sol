@@ -3,6 +3,7 @@ pragma solidity ^0.8.17;
 
 import "./SheepPasture.sol";
 import "./ERC721.sol";
+import "./ERC721Receiver.sol";
 
 contract SheepContract is SheepPasture, ERC721 {
     mapping(uint => address) approvals;
