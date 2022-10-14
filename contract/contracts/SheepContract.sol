@@ -60,6 +60,10 @@ contract SheepContract is SheepPasture, ERC721 {
         address _to,
         uint _tokenId
     ) private {
+        require(_from == sheepToOwner[_tokenId]);
+        require(_to != address(0));
+        require(_from != _to);
+
         sheepToOwner[_tokenId] = _to;
         ownerSheepCount[_from]--;
         ownerSheepCount[_to]++;
