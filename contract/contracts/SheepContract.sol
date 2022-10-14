@@ -24,14 +24,35 @@ contract SheepContract is SheepPasture, ERC721 {
         address _from,
         address _to,
         uint256 _tokenId,
-        bytes calldata data
-    ) external payable {}
+        bytes memory data
+    ) public payable {
+        transferFrom(_from, _to, _tokenId);
+
+        //Get size of "_to" address, if 0 it's a wallet
+        uint32 size;
+        assembly {
+            size := extcodesize(_to)
+        }
+        if (size > 0) {
+            ERC721TokenReceiver receiver = ERC721TokenReceiver(_to);
+            require(
+                receiver.onERC721Received(msg.sender, _from, _tokenId, data) ==
+                    bytes4(
+                        keccak256(
+                            "onERC721Received(address,address,uint256,bytes)"
+                        )
+                    )
+            );
+        }
+    }
 
     function safeTransferFrom(
         address _from,
         address _to,
         uint256 _tokenId
-    ) external payable {}
+    ) external payable {
+        safeTransferFrom(_from, _to, _tokenId, "");
+    }
 
     function _transfer(
         address _from,
