@@ -48,7 +48,7 @@ contract SheepContract is SheepPasture, ERC721 {
         address _from,
         address _to,
         uint256 _tokenId
-    ) external payable {
+    ) public payable {
         require(
             sheepToOwner[_tokenId] == msg.sender ||
                 approvals[_tokenId] == msg.sender
