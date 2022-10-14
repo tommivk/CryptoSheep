@@ -38,7 +38,14 @@ contract SheepContract is SheepPasture, ERC721 {
         uint256 _tokenId
     ) external payable {}
 
-    function approve(address _approved, uint256 _tokenId) external payable {}
+    function approve(address _approved, uint256 _tokenId)
+        external
+        payable
+        onlySheepOwner(_tokenId)
+    {
+        approvals[_tokenId] = _approved;
+        emit Approval(msg.sender, _approved, _tokenId);
+    }
 
     function setApprovalForAll(address _operator, bool _approved) external {}
 
