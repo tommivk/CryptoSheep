@@ -49,7 +49,9 @@ contract SheepContract is SheepPasture, ERC721 {
 
     function setApprovalForAll(address _operator, bool _approved) external {}
 
-    function getApproved(uint256 _tokenId) external view returns (address) {}
+    function getApproved(uint256 _tokenId) external view returns (address) {
+        return approvals[_tokenId];
+    }
 
     function isApprovedForAll(address _owner, address _operator)
         external
