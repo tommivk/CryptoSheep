@@ -11,9 +11,13 @@ contract SheepContract is SheepPasture, ERC721 {
         sheepCost = _sheepCost;
     }
 
-    function balanceOf(address _owner) external view returns (uint256) {}
+    function balanceOf(address _owner) external view returns (uint256) {
+        return ownerSheepCount[_owner];
+    }
 
-    function ownerOf(uint256 _tokenId) external view returns (address) {}
+    function ownerOf(uint256 _tokenId) external view returns (address) {
+        return sheepToOwner[_tokenId];
+    }
 
     function safeTransferFrom(
         address _from,
