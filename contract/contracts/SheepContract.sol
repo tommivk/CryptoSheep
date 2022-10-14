@@ -7,6 +7,7 @@ import "./ERC721Receiver.sol";
 
 contract SheepContract is SheepPasture, ERC721 {
     mapping(uint => address) approvals;
+    mapping(address => mapping(address => bool)) authorized;
 
     constructor(uint _sheepCost) {
         sheepCost = _sheepCost;
@@ -70,23 +71,26 @@ contract SheepContract is SheepPasture, ERC721 {
         address _to,
         uint256 _tokenId
     ) public payable {
+        address owner = sheepToOwner[_tokenId];
         require(
-            sheepToOwner[_tokenId] == msg.sender ||
-                approvals[_tokenId] == msg.sender
+            owner == msg.sender ||
+                approvals[_tokenId] == msg.sender ||
+                authorized[owner][msg.sender]
         );
         _transfer(_from, _to, _tokenId);
     }
 
-    function approve(address _approved, uint256 _tokenId)
-        external
-        payable
-        onlySheepOwner(_tokenId)
-    {
+    function approve(address _approved, uint256 _tokenId) external payable {
+        address owner = sheepToOwner[_tokenId];
+        require(owner == msg.sender || authorized[owner][msg.sender]);
         approvals[_tokenId] = _approved;
         emit Approval(msg.sender, _approved, _tokenId);
     }
 
-    function setApprovalForAll(address _operator, bool _approved) external {}
+    function setApprovalForAll(address _operator, bool _approved) external {
+        authorized[msg.sender][_operator] = _approved;
+        emit ApprovalForAll(msg.sender, _operator, _approved);
+    }
 
     function getApproved(uint256 _tokenId) external view returns (address) {
         return approvals[_tokenId];
@@ -96,7 +100,9 @@ contract SheepContract is SheepPasture, ERC721 {
         external
         view
         returns (bool)
-    {}
+    {
+        return authorized[_owner][_operator];
+    }
 
     function supportsInterface(bytes4 interfaceID)
         external
