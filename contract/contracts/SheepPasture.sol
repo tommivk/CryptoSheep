@@ -57,12 +57,12 @@ contract SheepPasture is SheepSVG {
         Sheep memory sheep = sheeps[_sheepId];
 
         if ((block.timestamp - sheep.lastFeedTime) < 1 days) {
-            return string.concat(start, fill, happyFace, end);
+            return string.concat(SVGStart, SVGPath, happyFace, SVGEnd);
         }
         if ((block.timestamp - sheep.lastFeedTime) < 2 days) {
-            return string.concat(start, fill, neutralFace, end);
+            return string.concat(SVGStart, SVGPath, neutralFace, SVGEnd);
         }
-        return string.concat(start, fill, sadFace, end);
+        return string.concat(SVGStart, SVGPath, sadFace, SVGEnd);
     }
 
     function getOwnedSheeps() public view returns (Sheep[] memory) {
