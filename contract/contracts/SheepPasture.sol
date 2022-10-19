@@ -91,7 +91,7 @@ contract SheepPasture is SheepSVG {
         return result;
     }
 
-    function checkIsAlive(Sheep memory _sheep) private view returns (bool) {
+    function checkIsAlive(Sheep memory _sheep) internal view returns (bool) {
         if ((block.timestamp - _sheep.lastFeedTime) > feedingDeadline) {
             return false;
         }
