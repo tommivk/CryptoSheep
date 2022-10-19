@@ -112,6 +112,14 @@ contract SheepContract is SheepPasture, ERC721, ERC721Metadata {
         return authorized[_owner][_operator];
     }
 
+    function name() external pure returns (string memory _name) {
+        return "Sheep NFT";
+    }
+
+    function symbol() external pure returns (string memory _symbol) {
+        return "SHEEP";
+    }
+
     bytes4 ERC721_ID = 0x80ac58cd;
     bytes4 ERC721Metadata_ID = 0x5b5e139f;
 
