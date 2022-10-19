@@ -112,13 +112,14 @@ contract SheepContract is SheepPasture, ERC721, ERC721Metadata {
         return authorized[_owner][_operator];
     }
 
-    bytes4 interfaceID = 0x80ac58cd;
+    bytes4 ERC721_ID = 0x80ac58cd;
+    bytes4 ERC721Metadata_ID = 0x5b5e139f;
 
     function supportsInterface(bytes4 _interfaceID)
         external
         view
         returns (bool)
     {
-        return _interfaceID == interfaceID;
+        return _interfaceID == ERC721_ID || _interfaceID == ERC721Metadata_ID;
     }
 }
