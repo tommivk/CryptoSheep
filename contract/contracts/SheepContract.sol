@@ -2,10 +2,12 @@
 pragma solidity ^0.8.17;
 
 import "./SheepPasture.sol";
+
 import "./ERC721.sol";
 import "./ERC721Receiver.sol";
+import "./ERC721Metadata.sol";
 
-contract SheepContract is SheepPasture, ERC721 {
+contract SheepContract is SheepPasture, ERC721, ERC721Metadata {
     mapping(uint => address) approvals;
     mapping(address => mapping(address => bool)) authorized;
 
