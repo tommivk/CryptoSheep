@@ -33,14 +33,18 @@ contract SheepPasture is SheepSVG {
         _;
     }
 
-    function feed(uint _sheepId) public onlySheepOwner(_sheepId) {
+    function feed(uint _sheepId)
+        public
+        onlySheepOwner(_sheepId)
+        returns (bool)
+    {
         Sheep storage sheep = sheeps[_sheepId];
         require(sheep.isAlive);
         require((block.timestamp - sheep.lastFeedTime) > 1 days);
 
         if ((block.timestamp - sheep.lastFeedTime) > feedingDeadline) {
             sheep.isAlive = false;
-            return;
+            return false;
         }
 
         sheep.lastFeedTime = uint64(block.timestamp);
@@ -50,6 +54,7 @@ contract SheepPasture is SheepSVG {
             sheep.level++;
             sheep.concecutiveFeedingDays = 0;
         }
+        return true;
     }
 
     function getSheepSVG(uint _sheepId) public view returns (string memory) {
