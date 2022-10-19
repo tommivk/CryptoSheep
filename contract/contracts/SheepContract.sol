@@ -120,6 +120,34 @@ contract SheepContract is SheepPasture, ERC721, ERC721Metadata {
         return "SHEEP";
     }
 
+    function tokenURI(uint256 _tokenId) external view returns (string memory) {
+        Sheep memory sheep = sheeps[_tokenId];
+
+        string memory svgData = getSheepSVG(_tokenId);
+        string memory isAlive = checkIsAlive(sheep) ? "true" : "false";
+        string memory json = Base64.encode(
+            bytes(
+                string(
+                    abi.encodePacked(
+                        '{"name": "Sheep", "description": "Sheep NFT", "image": "',
+                        bytes(svgData),
+                        '","attributes": [{',
+                        '"sheepName": "',
+                        sheep.name,
+                        '",',
+                        '"isAlive":',
+                        '"',
+                        isAlive,
+                        '"',
+                        "}]",
+                        "}"
+                    )
+                )
+            )
+        );
+        return json;
+    }
+
     bytes4 ERC721_ID = 0x80ac58cd;
     bytes4 ERC721Metadata_ID = 0x5b5e139f;
 
