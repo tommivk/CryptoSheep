@@ -8,6 +8,7 @@ contract SheepPasture is SheepSVG {
     uint feedingDeadline = 3 days;
 
     struct Sheep {
+        uint32 id;
         string name;
         uint16 level;
         uint64 lastFeedTime;
@@ -22,8 +23,8 @@ contract SheepPasture is SheepSVG {
 
     function buySheep(string memory _name) public payable {
         require(msg.value == sheepCost);
-        sheeps.push(Sheep(_name, 0, uint64(block.timestamp), 0, true));
-        uint id = sheeps.length - 1;
+        uint32 id = uint32(sheeps.length);
+        sheeps.push(Sheep(id, _name, 0, uint64(block.timestamp), 0, true));
         sheepToOwner[id] = msg.sender;
         ownerSheepCount[msg.sender]++;
     }
