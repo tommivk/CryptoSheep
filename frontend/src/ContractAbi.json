@@ -145,7 +145,13 @@
         }
       ],
       "name": "feed",
-      "outputs": [],
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
@@ -174,6 +180,11 @@
       "outputs": [
         {
           "components": [
+            {
+              "internalType": "uint32",
+              "name": "id",
+              "type": "uint32"
+            },
             {
               "internalType": "string",
               "name": "name",
@@ -413,6 +424,11 @@
       ],
       "name": "sheeps",
       "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "id",
+          "type": "uint32"
+        },
         {
           "internalType": "string",
           "name": "name",
