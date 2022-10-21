@@ -5,6 +5,7 @@ import Web3 from "web3";
 
 import contractAbi from "./ContractAbi.json";
 import Button from "./components/Button";
+import SheepList from "./components/SheepList";
 
 const contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
 const sheepCost = 200;
@@ -61,6 +62,7 @@ const App = () => {
         onChange={({ target }) => setSheepName(target.value)}
       ></input>
       <Button onClick={mintSheep}>Mint</Button>
+      <SheepList account={account} contract={contract} />
     </div>
   );
 };
