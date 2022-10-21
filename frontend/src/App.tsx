@@ -4,11 +4,14 @@ import { AbiItem } from "web3-utils";
 import Web3 from "web3";
 
 import contractAbi from "./ContractAbi.json";
+import Button from "./components/Button";
 
 const contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
+const sheepCost = 200;
 
 const App = () => {
   const [account, setAccount] = useState<string>();
+  const [sheepName, setSheepName] = useState("");
 
   const web3 = new Web3(Web3.givenProvider);
 
@@ -31,13 +34,33 @@ const App = () => {
     connectWallet();
   }, [connectWallet]);
 
+  const mintSheep = async () => {
+    if (!account) {
+      return connectWallet();
+    }
+    if (!sheepName) return console.error("Name is required");
+    try {
+      await contract.methods
+        .buySheep(sheepName)
+        .send({ from: account, value: sheepCost });
+      setSheepName("");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div>
       {account ? (
         <div>Connected address: {account}</div>
       ) : (
-        <button onClick={connectWallet}>Connect wallet</button>
+        <Button onClick={connectWallet}>Connect wallet</Button>
       )}
+      <input
+        type="text"
+        onChange={({ target }) => setSheepName(target.value)}
+      ></input>
+      <Button onClick={mintSheep}>Mint</Button>
     </div>
   );
 };
