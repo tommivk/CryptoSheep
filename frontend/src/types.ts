@@ -6,3 +6,8 @@ export type Sheep = {
   concecutiveFeedingDays: string;
   isAlive: boolean;
 };
+
+export type BlockData = {
+  blockNumber: number;
+  blockTime: number;
+};
