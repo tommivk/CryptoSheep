@@ -6,6 +6,7 @@ import Web3 from "web3";
 import contractAbi from "./ContractAbi.json";
 import Button from "./components/Button";
 import SheepList from "./components/SheepList";
+import { BlockData } from "./types";
 
 const contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
 const sheepCost = 200;
@@ -13,6 +14,7 @@ const sheepCost = 200;
 const App = () => {
   const [account, setAccount] = useState<string>();
   const [sheepName, setSheepName] = useState("");
+  const [blockData, setBlockData] = useState<BlockData>();
 
   const web3 = new Web3(Web3.givenProvider);
 
@@ -29,6 +31,29 @@ const App = () => {
     } else {
       console.error("No compatible wallet found");
     }
+  }, []);
+
+  const getBlockTime = useCallback(async () => {
+    const blockNumber = await web3.eth.getBlockNumber();
+    const block = await web3.eth.getBlock(blockNumber);
+    setBlockData({
+      blockNumber,
+      blockTime: Number(block.timestamp),
+    });
+  }, []);
+
+  useEffect(() => {
+    getBlockTime();
+    const subscription = web3.eth.subscribe("newBlockHeaders");
+    subscription.on("data", (data) => {
+      setBlockData({
+        blockNumber: data.number,
+        blockTime: Number(data.timestamp),
+      });
+    });
+    return () => {
+      subscription.unsubscribe(() => console.log("Unsubscribed"));
+    };
   }, []);
 
   useEffect(() => {
@@ -49,6 +74,8 @@ const App = () => {
       console.error(error);
     }
   };
+
+  if (!blockData) return <div>Loading</div>;
 
   return (
     <div>
