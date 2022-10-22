@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AbiItem } from "web3-utils";
 
 import Web3 from "web3";
@@ -75,6 +75,10 @@ const App = () => {
     }
   };
 
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSheepName(event.target.value);
+  };
+
   if (!blockData) return <div>Loading</div>;
 
   return (
@@ -84,10 +88,7 @@ const App = () => {
       ) : (
         <Button onClick={connectWallet}>Connect wallet</Button>
       )}
-      <input
-        type="text"
-        onChange={({ target }) => setSheepName(target.value)}
-      ></input>
+      <input type="text" value={sheepName} onChange={handleNameChange}></input>
       <Button onClick={mintSheep}>Mint</Button>
       <SheepList account={account} contract={contract} />
     </div>
