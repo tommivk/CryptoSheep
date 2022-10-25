@@ -1,52 +1,18 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "./components/Button";
 import SheepList from "./components/SheepList";
+import useBlockData from "./hooks/useBlockData";
 import useWallet from "./hooks/useWallet";
 import useWeb3 from "./hooks/useWeb3";
-
-import { BlockData } from "./types";
 
 const sheepCost = 200;
 
 const App = () => {
   const [sheepName, setSheepName] = useState("");
-  const [blockData, setBlockData] = useState<BlockData>();
-
-  const web3 = new Web3(Web3.givenProvider);
 
   const [web3, contract] = useWeb3();
   const [account, connectWallet] = useWallet(web3);
-
-  const getBlockTime = useCallback(async () => {
-    if (!web3) return;
-    const blockNumber = await web3.eth.getBlockNumber();
-    const block = await web3.eth.getBlock(blockNumber);
-    setBlockData({
-      blockNumber,
-      blockTime: Number(block.timestamp),
-    });
-  }, [web3]);
-
-  useEffect(() => {
-    if (web3) {
-      getBlockTime();
-      const subscription = web3.eth.subscribe("newBlockHeaders");
-      subscription.on("data", (data) => {
-        setBlockData({
-          blockNumber: data.number,
-          blockTime: Number(data.timestamp),
-        });
-      });
-
-      return () => {
-        subscription.unsubscribe(() => console.log("Unsubscribed"));
-      };
-    }
-  }, [web3, getBlockTime]);
-
-  useEffect(() => {
-    connectWallet();
-  }, [connectWallet]);
+  const [blockData] = useBlockData(web3);
 
   const mintSheep = async () => {
     if (!account) {
@@ -67,7 +33,7 @@ const App = () => {
     setSheepName(event.target.value);
   };
 
-  if (!blockData) return <div>Loading</div>;
+  if (!blockData || !web3 || !contract) return <div>Loading</div>;
 
   return (
     <div>
@@ -78,7 +44,7 @@ const App = () => {
       )}
       <input type="text" value={sheepName} onChange={handleNameChange}></input>
       <Button onClick={mintSheep}>Mint</Button>
-      <SheepList account={account} contract={contract} />
+      <SheepList account={account} contract={contract} blockData={blockData} />
     </div>
   );
 };
