@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Button from "./components/Button";
 import SheepList from "./components/SheepList";
+import useWallet from "./hooks/useWallet";
 import useWeb3 from "./hooks/useWeb3";
 
 import { BlockData } from "./types";
@@ -8,13 +9,13 @@ import { BlockData } from "./types";
 const sheepCost = 200;
 
 const App = () => {
-  const [account, setAccount] = useState<string>();
   const [sheepName, setSheepName] = useState("");
   const [blockData, setBlockData] = useState<BlockData>();
 
   const web3 = new Web3(Web3.givenProvider);
 
   const [web3, contract] = useWeb3();
+  const [account, connectWallet] = useWallet(web3);
 
   const getBlockTime = useCallback(async () => {
     if (!web3) return;
