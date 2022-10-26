@@ -5,6 +5,7 @@ export type Sheep = {
   lastFeedTime: string;
   concecutiveFeedingDays: string;
   isAlive: boolean;
+  svg: string;
 };
 
 export type BlockData = {
