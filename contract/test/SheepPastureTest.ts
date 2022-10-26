@@ -40,7 +40,6 @@ describe("Sheep tests", () => {
     expect(sheep.name).to.equal("mySheep");
     expect(sheep.concecutiveFeedingDays).to.equal(0);
     expect(sheep.level).to.equal(0);
-    expect(sheep.isAlive).to.equal(true);
     expect(sheep.lastFeedTime).to.not.equal(0);
     expect(sheep.lastFeedTime).to.equal(block.timestamp);
   });
@@ -77,9 +76,7 @@ describe("Sheep tests", () => {
 
     await ethers.provider.send("evm_increaseTime", [threeDays]);
     await ethers.provider.send("evm_mine", []);
-    await sheeps.feed(0);
-    const sheep = await sheeps.sheeps(0);
-    expect(sheep.isAlive).to.equal(false);
+    await expect(sheeps.feed(0)).to.revertedWith("Your sheep is dead :(");
   });
 
   it("Should not be possible to feed that you dont own", async () => {
