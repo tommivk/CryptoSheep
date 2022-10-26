@@ -156,6 +156,32 @@
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "feedingDeadline",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "feedingUnlock",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -209,9 +235,14 @@
               "internalType": "bool",
               "name": "isAlive",
               "type": "bool"
+            },
+            {
+              "internalType": "string",
+              "name": "svg",
+              "type": "string"
             }
           ],
-          "internalType": "struct SheepPasture.Sheep[]",
+          "internalType": "struct SheepPasture.SheepResponse[]",
           "name": "",
           "type": "tuple[]"
         }
@@ -448,11 +479,6 @@
           "internalType": "uint8",
           "name": "concecutiveFeedingDays",
           "type": "uint8"
-        },
-        {
-          "internalType": "bool",
-          "name": "isAlive",
-          "type": "bool"
         }
       ],
       "stateMutability": "view",
