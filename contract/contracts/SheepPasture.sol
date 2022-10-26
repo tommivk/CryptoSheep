@@ -5,7 +5,7 @@ import "./SheepSVG.sol";
 
 contract SheepPasture is SheepSVG {
     uint public sheepCost;
-    uint feedingDeadline = 3 days;
+    uint public feedingDeadline = 3 days;
 
     struct Sheep {
         uint32 id;
