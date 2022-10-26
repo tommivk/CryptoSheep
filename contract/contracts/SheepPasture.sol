@@ -6,6 +6,7 @@ import "./SheepSVG.sol";
 contract SheepPasture is SheepSVG {
     uint public sheepCost;
     uint public feedingDeadline = 3 days;
+    uint public feedingUnlock = 1 days;
 
     struct Sheep {
         uint32 id;
@@ -40,7 +41,7 @@ contract SheepPasture is SheepSVG {
     {
         Sheep storage sheep = sheeps[_sheepId];
 
-        require((block.timestamp - sheep.lastFeedTime) > 1 days);
+        require((block.timestamp - sheep.lastFeedTime) > feedingUnlock);
         require(
             (block.timestamp - sheep.lastFeedTime) < feedingDeadline,
             "Your sheep is dead :("
