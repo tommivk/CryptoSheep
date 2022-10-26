@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { Contract } from "web3-eth-contract";
 import SheepCard from "./SheepCard";
+import { BlockData } from "../types";
 
 type Props = {
   account: string | undefined;
   contract: Contract;
+  blockData: BlockData;
 };
 
-const SheepList = ({ account, contract }: Props) => {
+const SheepList = ({ account, contract, blockData }: Props) => {
   const [sheeps, setSheeps] = useState([]);
 
   const getSheeps = useCallback(async () => {
@@ -21,7 +23,7 @@ const SheepList = ({ account, contract }: Props) => {
     if (account) {
       getSheeps();
     }
-  }, [getSheeps, account]);
+  }, [getSheeps, account, blockData.blockNumber]);
 
   return (
     <div>
@@ -34,6 +36,7 @@ const SheepList = ({ account, contract }: Props) => {
               sheep={sheep}
               contract={contract}
               account={account}
+              blockData={blockData}
             />
           ))}
       </div>
