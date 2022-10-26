@@ -11,7 +11,7 @@ const useWeb3 = () => {
   const [contract, setContract] = useState<Contract>();
 
   useEffect(() => {
-    const web3 = new Web3(Web3.givenProvider);
+    const web3 = new Web3(Web3.givenProvider ?? "ws://localhost:8545");
     setWeb3(web3);
 
     const contract = new web3.eth.Contract(
