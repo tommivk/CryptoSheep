@@ -13,7 +13,6 @@ contract SheepPasture is SheepSVG {
         uint16 level;
         uint64 lastFeedTime;
         uint8 concecutiveFeedingDays;
-        bool isAlive;
     }
 
     Sheep[] public sheeps;
@@ -24,7 +23,7 @@ contract SheepPasture is SheepSVG {
     function buySheep(string memory _name) public payable {
         require(msg.value == sheepCost);
         uint32 id = uint32(sheeps.length);
-        sheeps.push(Sheep(id, _name, 0, uint64(block.timestamp), 0, true));
+        sheeps.push(Sheep(id, _name, 0, uint64(block.timestamp), 0));
         sheepToOwner[id] = msg.sender;
         ownerSheepCount[msg.sender]++;
     }
@@ -40,13 +39,12 @@ contract SheepPasture is SheepSVG {
         returns (bool)
     {
         Sheep storage sheep = sheeps[_sheepId];
-        require(sheep.isAlive);
-        require((block.timestamp - sheep.lastFeedTime) > 1 days);
 
-        if ((block.timestamp - sheep.lastFeedTime) > feedingDeadline) {
-            sheep.isAlive = false;
-            return false;
-        }
+        require((block.timestamp - sheep.lastFeedTime) > 1 days);
+        require(
+            (block.timestamp - sheep.lastFeedTime) < feedingDeadline,
+            "Your sheep is dead :("
+        );
 
         sheep.lastFeedTime = uint64(block.timestamp);
         sheep.concecutiveFeedingDays++;
