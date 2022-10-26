@@ -69,17 +69,36 @@ contract SheepPasture is SheepSVG {
         return string.concat(SVGStart, SVGPath, sadFace, SVGEnd);
     }
 
-    function getOwnedSheeps() public view returns (Sheep[] memory) {
+    struct SheepResponse {
+        uint32 id;
+        string name;
+        uint16 level;
+        uint64 lastFeedTime;
+        uint8 concecutiveFeedingDays;
+        bool isAlive;
+        string svg;
+    }
+
+    function getOwnedSheeps() public view returns (SheepResponse[] memory) {
         uint sheepCount = ownerSheepCount[msg.sender];
-        Sheep[] memory result = new Sheep[](sheepCount);
+        SheepResponse[] memory result = new SheepResponse[](sheepCount);
 
         uint index = 0;
 
         for (uint i = 0; i < sheeps.length; i++) {
             if (sheepToOwner[i] == msg.sender) {
                 Sheep memory sheep = sheeps[i];
-                sheep.isAlive = sheep.isAlive ? checkIsAlive(sheep) : false;
-                result[index] = sheep;
+                SheepResponse memory sheepData;
+
+                sheepData.id = sheep.id;
+                sheepData.name = sheep.name;
+                sheepData.level = sheep.level;
+                sheepData.lastFeedTime = sheep.lastFeedTime;
+                sheepData.concecutiveFeedingDays = sheep.concecutiveFeedingDays;
+                sheepData.isAlive = checkIsAlive(sheep);
+                sheepData.svg = getSheepSVG(i);
+
+                result[index] = sheepData;
                 index++;
             }
             if (index == sheepCount) {
