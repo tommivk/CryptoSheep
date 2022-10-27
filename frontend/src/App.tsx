@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, Route, Routes, useMatch } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import Button from "./components/Button";
-import SheepCard from "./components/SheepCard";
 import SheepList from "./components/SheepList";
+import SheepPage from "./components/SheepPage";
 import useBlockData from "./hooks/useBlockData";
 import useWallet from "./hooks/useWallet";
 import useWeb3 from "./hooks/useWeb3";
@@ -12,7 +12,7 @@ const sheepCost = 200;
 
 const App = () => {
   const [sheepName, setSheepName] = useState("");
-  const [sheeps, setSheeps] = useState<Array<Sheep>>([]);
+  const [ownedSheeps, setOwnedSheeps] = useState<Array<Sheep>>([]);
 
   const [web3, contract] = useWeb3();
   const [account, connectWallet] = useWallet(web3);
@@ -23,7 +23,7 @@ const App = () => {
     const result = await contract.methods
       .getOwnedSheeps()
       .call({ from: account });
-    setSheeps(result);
+    setOwnedSheeps(result);
   }, [account, contract]);
 
   useEffect(() => {
@@ -48,12 +48,6 @@ const App = () => {
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSheepName(event.target.value);
   };
-
-  let sheepMatch;
-  const match = useMatch("/sheep/:id");
-  if (match) {
-    sheepMatch = sheeps.find((sheep) => sheep.id === match.params.id);
-  }
 
   if (!blockData || !web3 || !contract) return <div>Loading</div>;
 
@@ -95,28 +89,16 @@ const App = () => {
         <Route
           path="/sheep/:id"
           element={
-            sheepMatch ? (
-              <SheepCard
-                sheep={sheepMatch}
-                account={account}
-                contract={contract}
-                blockData={blockData}
-              />
-            ) : (
-              <div>Sheep not found</div>
-            )
-          }
-        />
-        <Route
-          path="/sheep"
-          element={
-            <SheepList
-              sheeps={sheeps}
+            <SheepPage
               account={account}
               contract={contract}
               blockData={blockData}
             />
           }
+        />
+        <Route
+          path="/sheep"
+          element={<SheepList sheeps={ownedSheeps} account={account} />}
         />
         <Route path="*" element={<div>404</div>} />
       </Routes>
