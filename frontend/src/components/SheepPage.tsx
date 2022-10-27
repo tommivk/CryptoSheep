@@ -1,6 +1,6 @@
 import { Contract } from "web3-eth-contract";
 import useCountdown from "../hooks/useCountdown";
-import { BlockData, Sheep } from "../types";
+import { BlockData, ContractState, Sheep } from "../types";
 import InfoBox from "./InfoBox";
 import Button from "./Button";
 import { useCallback, useEffect, useState } from "react";
@@ -10,16 +10,16 @@ type Props = {
   contract: Contract;
   account: string | undefined;
   blockData: BlockData;
+  contractState: ContractState;
 };
 
-const feedUnlock = 60;
-const feedDeadline = 60 * 3;
-
-const SheepPage = ({ contract, account, blockData }: Props) => {
+const SheepPage = ({ contract, account, blockData, contractState }: Props) => {
   const [owner, setOwner] = useState("");
   const [sheep, setSheep] = useState<Sheep>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+
+  const { feedingLockDuration, feedingDeadline } = contractState;
 
   const { id } = useParams();
 
@@ -54,10 +54,10 @@ const SheepPage = ({ contract, account, blockData }: Props) => {
   const status = sheep?.isAlive ? "Alive" : "Dead";
 
   const [feedTimeLeft] = useCountdown(
-    feedDeadline - (blockData.blockTime - Number(sheep?.lastFeedTime))
+    feedingDeadline - (blockData.blockTime - Number(sheep?.lastFeedTime))
   );
   const [feedingAvailableIn, feedingUnlock] = useCountdown(
-    Number(sheep?.lastFeedTime) + feedUnlock - blockData.blockTime
+    Number(sheep?.lastFeedTime) + feedingLockDuration - blockData.blockTime
   );
   const lastFed = new Date(Number(sheep?.lastFeedTime) * 1000).toLocaleString();
 

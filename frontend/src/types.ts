@@ -12,3 +12,9 @@ export type BlockData = {
   blockNumber: number;
   blockTime: number;
 };
+
+export type ContractState = {
+  sheepCost: number;
+  feedingDeadline: number;
+  feedingLockDuration: number;
+};

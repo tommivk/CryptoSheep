@@ -14,7 +14,7 @@ const App = () => {
   const [sheepName, setSheepName] = useState("");
   const [ownedSheeps, setOwnedSheeps] = useState<Array<Sheep>>([]);
 
-  const [web3, contract] = useWeb3();
+  const [web3, contract, contractState] = useWeb3();
   const [account, connectWallet] = useWallet(web3);
   const [blockData] = useBlockData(web3);
 
@@ -49,7 +49,8 @@ const App = () => {
     setSheepName(event.target.value);
   };
 
-  if (!blockData || !web3 || !contract) return <div>Loading</div>;
+  if (!blockData || !web3 || !contract || !contractState)
+    return <div>Loading</div>;
 
   return (
     <div>
@@ -93,6 +94,7 @@ const App = () => {
               account={account}
               contract={contract}
               blockData={blockData}
+              contractState={contractState}
             />
           }
         />

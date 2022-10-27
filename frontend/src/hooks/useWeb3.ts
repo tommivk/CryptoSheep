@@ -3,12 +3,30 @@ import { AbiItem } from "web3-utils";
 import { Contract } from "web3-eth-contract";
 import Web3 from "web3";
 import contractAbi from "../ContractAbi.json";
+import { ContractState } from "../types";
 
 const contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
 
 const useWeb3 = () => {
   const [web3, setWeb3] = useState<Web3>();
   const [contract, setContract] = useState<Contract>();
+  const [contractState, setContractState] = useState<ContractState>();
+
+  const getContractState = async (contract: Contract) => {
+    try {
+      const sheepCost = await contract.methods.sheepCost().call();
+      const feedingDeadline = await contract.methods.feedingDeadline().call();
+      const feedingLockDuration = await contract.methods.feedingUnlock().call();
+
+      setContractState({
+        sheepCost: Number(sheepCost),
+        feedingDeadline: Number(feedingDeadline),
+        feedingLockDuration: Number(feedingLockDuration),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     const web3 = new Web3(Web3.givenProvider ?? "ws://localhost:8545");
@@ -18,10 +36,11 @@ const useWeb3 = () => {
       contractAbi.abi as AbiItem[],
       contractAddress
     );
+    getContractState(contract);
     setContract(contract);
   }, []);
 
-  return [web3, contract] as const;
+  return [web3, contract, contractState] as const;
 };
 
 export default useWeb3;
