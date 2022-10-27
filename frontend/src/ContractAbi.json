@@ -67,6 +67,31 @@
         {
           "indexed": true,
           "internalType": "address",
+          "name": "_owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "_sheepId",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "_name",
+          "type": "string"
+        }
+      ],
+      "name": "NewSheep",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
           "name": "_from",
           "type": "address"
         },
@@ -245,6 +270,62 @@
           "internalType": "struct SheepPasture.SheepResponse[]",
           "name": "",
           "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_sheepId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getSheep",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint32",
+              "name": "id",
+              "type": "uint32"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "uint16",
+              "name": "level",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint64",
+              "name": "lastFeedTime",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint8",
+              "name": "concecutiveFeedingDays",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bool",
+              "name": "isAlive",
+              "type": "bool"
+            },
+            {
+              "internalType": "string",
+              "name": "svg",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct SheepPasture.SheepResponse",
+          "name": "",
+          "type": "tuple"
         }
       ],
       "stateMutability": "view",
