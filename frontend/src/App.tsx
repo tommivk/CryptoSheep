@@ -5,12 +5,13 @@ import SheepList from "./components/SheepList";
 import useBlockData from "./hooks/useBlockData";
 import useWallet from "./hooks/useWallet";
 import useWeb3 from "./hooks/useWeb3";
+import { Sheep } from "./types";
 
 const sheepCost = 200;
 
 const App = () => {
   const [sheepName, setSheepName] = useState("");
-  const [sheeps, setSheeps] = useState([]);
+  const [sheeps, setSheeps] = useState<Array<Sheep>>([]);
 
   const [web3, contract] = useWeb3();
   const [account, connectWallet] = useWallet(web3);
