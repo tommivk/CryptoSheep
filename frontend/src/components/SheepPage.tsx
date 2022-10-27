@@ -16,7 +16,6 @@ type Props = {
 const SheepPage = ({ contract, account, blockData, contractState }: Props) => {
   const [owner, setOwner] = useState("");
   const [sheep, setSheep] = useState<Sheep>();
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
   const { feedingLockDuration, feedingDeadline } = contractState;
@@ -32,8 +31,6 @@ const SheepPage = ({ contract, account, blockData, contractState }: Props) => {
         setOwner(owner);
       } catch (error) {
         setError(true);
-      } finally {
-        setLoading(false);
       }
     },
     [id]
@@ -62,7 +59,7 @@ const SheepPage = ({ contract, account, blockData, contractState }: Props) => {
   const lastFed = new Date(Number(sheep?.lastFeedTime) * 1000).toLocaleString();
 
   if (error) return <div>Error</div>;
-  if (loading || !sheep) return <div>Loading..</div>;
+  if (!sheep) return <div>Loading..</div>;
 
   return (
     <div className="grid grid-cols-1 grid-flow-row md:grid-cols-2 w-[900px] h-fit bg-slate-800 max-w-[95vw] rounded-lg m-auto mt-20 text-slate-300">
