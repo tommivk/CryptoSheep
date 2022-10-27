@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import Button from "./components/Button";
 import SheepList from "./components/SheepList";
@@ -10,10 +10,23 @@ const sheepCost = 200;
 
 const App = () => {
   const [sheepName, setSheepName] = useState("");
+  const [sheeps, setSheeps] = useState([]);
 
   const [web3, contract] = useWeb3();
   const [account, connectWallet] = useWallet(web3);
   const [blockData] = useBlockData(web3);
+
+  const getSheeps = useCallback(async () => {
+    if (!contract || !account) return;
+    const result = await contract.methods
+      .getOwnedSheeps()
+      .call({ from: account });
+    setSheeps(result);
+  }, [account, contract]);
+
+  useEffect(() => {
+    getSheeps();
+  }, [getSheeps, account, contract, blockData?.blockNumber]);
 
   const mintSheep = async () => {
     if (!account) {
@@ -75,6 +88,7 @@ const App = () => {
           path="/sheep"
           element={
             <SheepList
+              sheeps={sheeps}
               account={account}
               contract={contract}
               blockData={blockData}

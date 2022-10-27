@@ -1,30 +1,15 @@
-import { useCallback, useEffect, useState } from "react";
 import { Contract } from "web3-eth-contract";
 import SheepCard from "./SheepCard";
-import { BlockData } from "../types";
+import { BlockData, Sheep } from "../types";
 
 type Props = {
+  sheeps: Array<Sheep>;
   account: string | undefined;
   contract: Contract;
   blockData: BlockData;
 };
 
-const SheepList = ({ account, contract, blockData }: Props) => {
-  const [sheeps, setSheeps] = useState([]);
-
-  const getSheeps = useCallback(async () => {
-    const result = await contract.methods
-      .getOwnedSheeps()
-      .call({ from: account });
-    setSheeps(result);
-  }, [account]);
-
-  useEffect(() => {
-    if (account) {
-      getSheeps();
-    }
-  }, [getSheeps, account, blockData.blockNumber]);
-
+const SheepList = ({ sheeps, account, contract, blockData }: Props) => {
   return (
     <div>
       <h1>My sheeps</h1>
