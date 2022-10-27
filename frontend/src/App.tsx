@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { Link, Route, Routes } from "react-router-dom";
 import Button from "./components/Button";
 import SheepList from "./components/SheepList";
 import useBlockData from "./hooks/useBlockData";
@@ -37,14 +38,51 @@ const App = () => {
 
   return (
     <div>
-      {account ? (
-        <div>Connected address: {account}</div>
-      ) : (
-        <Button onClick={connectWallet}>Connect wallet</Button>
-      )}
-      <input type="text" value={sheepName} onChange={handleNameChange}></input>
-      <Button onClick={mintSheep}>Mint</Button>
-      <SheepList account={account} contract={contract} blockData={blockData} />
+      <nav>
+        <ul className="flex">
+          <li>
+            <Link to="/">Mint</Link>
+          </li>
+          <li>
+            <Link to="/sheep">My sheeps</Link>
+          </li>
+          <li>
+            {account ? (
+              <div>Connected address: {account}</div>
+            ) : (
+              <Button onClick={connectWallet}>Connect wallet</Button>
+            )}
+          </li>
+        </ul>
+      </nav>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div>
+              <h1>Mint</h1>
+              <input
+                type="text"
+                value={sheepName}
+                onChange={handleNameChange}
+              ></input>
+
+              <Button onClick={mintSheep}>Mint</Button>
+            </div>
+          }
+        />
+        <Route
+          path="/sheep"
+          element={
+            <SheepList
+              account={account}
+              contract={contract}
+              blockData={blockData}
+            />
+          }
+        />
+        <Route path="*" element={<div>404</div>} />
+      </Routes>
     </div>
   );
 };
