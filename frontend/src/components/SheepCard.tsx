@@ -6,7 +6,7 @@ import useCountdown from "../hooks/useCountdown";
 type Props = {
   sheep: Sheep;
   contract: Contract;
-  account: string;
+  account: string | undefined;
   blockData: BlockData;
 };
 
@@ -84,7 +84,7 @@ const SheepCard = ({ sheep, contract, account, blockData }: Props) => {
                 Time left to feed: {feedTimeLeft}
               </p>
             }
-            {feedDeadlineSeconds > 0 && (
+            {account && feedDeadlineSeconds > 0 && (
               <Button
                 className="m-auto mb-3 py-2  block"
                 onClick={() => feed(sheep.id)}

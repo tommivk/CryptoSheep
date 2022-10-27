@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useMatch } from "react-router-dom";
 import Button from "./components/Button";
+import SheepCard from "./components/SheepCard";
 import SheepList from "./components/SheepList";
 import useBlockData from "./hooks/useBlockData";
 import useWallet from "./hooks/useWallet";
@@ -48,6 +49,12 @@ const App = () => {
     setSheepName(event.target.value);
   };
 
+  let sheepMatch;
+  const match = useMatch("/sheep/:id");
+  if (match) {
+    sheepMatch = sheeps.find((sheep) => sheep.id === match.params.id);
+  }
+
   if (!blockData || !web3 || !contract) return <div>Loading</div>;
 
   return (
@@ -83,6 +90,21 @@ const App = () => {
 
               <Button onClick={mintSheep}>Mint</Button>
             </div>
+          }
+        />
+        <Route
+          path="/sheep/:id"
+          element={
+            sheepMatch ? (
+              <SheepCard
+                sheep={sheepMatch}
+                account={account}
+                contract={contract}
+                blockData={blockData}
+              />
+            ) : (
+              <div>Sheep not found</div>
+            )
           }
         />
         <Route
