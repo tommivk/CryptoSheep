@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import Button from "./components/Button";
 import SheepList from "./components/SheepList";
 import SheepPage from "./components/SheepPage";
@@ -7,6 +7,7 @@ import useBlockData from "./hooks/useBlockData";
 import useWallet from "./hooks/useWallet";
 import useWeb3 from "./hooks/useWeb3";
 import { Sheep } from "./types";
+import { EventData } from "web3-eth-contract";
 
 const sheepCost = 200;
 
@@ -17,6 +18,22 @@ const App = () => {
   const [web3, contract, contractState] = useWeb3();
   const [account, connectWallet] = useWallet(web3);
   const [blockData] = useBlockData(web3);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!account || !contract) return;
+    contract.events.NewSheep(
+      { filter: { _owner: account } },
+      (error: Error, event: EventData) => {
+        if (error) {
+          return console.error(error);
+        }
+        const sheepId = event.returnValues._sheepId;
+        navigate(`/sheep/${sheepId}`);
+      }
+    );
+  }, [account, contract]);
 
   const getSheeps = useCallback(async () => {
     if (!contract || !account) return;
