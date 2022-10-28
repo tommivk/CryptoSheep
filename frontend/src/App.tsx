@@ -51,7 +51,7 @@ const App = () => {
   }, [getSheeps, account, contract, blockData?.blockNumber]);
 
   const toggleDarkMode = () => {
-    document.body.classList.toggle("dark", darkMode);
+    document.body.classList.toggle("dark", !darkMode);
     setDarkMode((prev) => !prev);
   };
 
