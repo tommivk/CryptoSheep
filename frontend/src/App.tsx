@@ -15,6 +15,7 @@ const sheepCost = 200;
 const App = () => {
   const [sheepName, setSheepName] = useState("");
   const [ownedSheeps, setOwnedSheeps] = useState<Array<Sheep>>([]);
+  const [darkMode, setDarkMode] = useState(true);
 
   const [web3, contract, contractState] = useWeb3();
   const [account, connectWallet] = useWallet(web3);
@@ -70,11 +71,19 @@ const App = () => {
     setSheepName(event.target.value);
   };
 
+  const toggleDarkMode = () => {
+    document.body.classList.toggle("dark", darkMode);
+    setDarkMode((prev) => !prev);
+  };
+
   if (!blockData || !web3 || !contract || !contractState)
     return <div>Loading</div>;
 
   return (
-    <div>
+    <div className="min-h-[100vh] dark:bg-[#13141a] dark:text-slate-200">
+      <button onClick={toggleDarkMode} className="absolute bottom-2 left-2">
+        Toggle darkmode
+      </button>
       <Navigation account={account} connectWallet={connectWallet} />
       <Routes>
         <Route
