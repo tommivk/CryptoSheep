@@ -24,8 +24,10 @@ const App = () => {
 
   useEffect(() => {
     if (!account || !contract) return;
-    contract.events.NewSheep(
-      { filter: { _owner: account } },
+    const subscription = contract.events.NewSheep(
+      {
+        filter: { _owner: account },
+      },
       (error: Error, event: EventData) => {
         if (error) {
           return console.error(error);
@@ -34,6 +36,7 @@ const App = () => {
         navigate(`/sheep/${sheepId}`);
       }
     );
+    return () => subscription.unsubscribe();
   }, [account, contract]);
 
   const getSheeps = useCallback(async () => {
