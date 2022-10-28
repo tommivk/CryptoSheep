@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Button from "./components/Button";
 import SheepList from "./components/SheepList";
 import SheepPage from "./components/SheepPage";
+import Navigation from "./components/Navigation";
 import useBlockData from "./hooks/useBlockData";
 import useWallet from "./hooks/useWallet";
 import useWeb3 from "./hooks/useWeb3";
@@ -71,23 +72,7 @@ const App = () => {
 
   return (
     <div>
-      <nav>
-        <ul className="flex">
-          <li>
-            <Link to="/">Mint</Link>
-          </li>
-          <li>
-            <Link to="/sheep">My sheeps</Link>
-          </li>
-          <li>
-            {account ? (
-              <div>Connected address: {account}</div>
-            ) : (
-              <Button onClick={connectWallet}>Connect wallet</Button>
-            )}
-          </li>
-        </ul>
-      </nav>
+      <Navigation account={account} connectWallet={connectWallet} />
       <Routes>
         <Route
           path="/"
