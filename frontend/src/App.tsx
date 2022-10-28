@@ -9,11 +9,9 @@ import useWallet from "./hooks/useWallet";
 import useWeb3 from "./hooks/useWeb3";
 import { Sheep } from "./types";
 import { EventData } from "web3-eth-contract";
-
-const sheepCost = 200;
+import Mint from "./components/Mint";
 
 const App = () => {
-  const [sheepName, setSheepName] = useState("");
   const [ownedSheeps, setOwnedSheeps] = useState<Array<Sheep>>([]);
   const [darkMode, setDarkMode] = useState(true);
 
@@ -52,25 +50,6 @@ const App = () => {
     getSheeps();
   }, [getSheeps, account, contract, blockData?.blockNumber]);
 
-  const mintSheep = async () => {
-    if (!account) {
-      return connectWallet();
-    }
-    if (!sheepName) return console.error("Name is required");
-    try {
-      await contract?.methods
-        .buySheep(sheepName)
-        .send({ from: account, value: sheepCost });
-      setSheepName("");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSheepName(event.target.value);
-  };
-
   const toggleDarkMode = () => {
     document.body.classList.toggle("dark", darkMode);
     setDarkMode((prev) => !prev);
@@ -89,16 +68,12 @@ const App = () => {
         <Route
           path="/"
           element={
-            <div>
-              <h1>Mint</h1>
-              <input
-                type="text"
-                value={sheepName}
-                onChange={handleNameChange}
-              ></input>
-
-              <Button onClick={mintSheep}>Mint</Button>
-            </div>
+            <Mint
+              account={account}
+              contract={contract}
+              contractState={contractState}
+              connectWallet={connectWallet}
+            />
           }
         />
         <Route
