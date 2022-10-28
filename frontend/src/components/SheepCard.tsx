@@ -11,7 +11,7 @@ const SheepCard = ({ sheep }: Props) => {
   ).toLocaleDateString();
 
   return (
-    <div className="w-[250px] bg-slate-800 max-w-screen box-border rounded-md text-slate-300 py-4 px-2">
+    <div className="w-[250px] bg-slate-800 dark:bg-darkMain max-w-screen box-border rounded-md text-slate-300 py-4 px-2">
       <h3 className="mb-2 mx-3 text-slate-400">#{sheep.id}</h3>
       <img
         className="w-[95%] m-auto bg-slate-700"

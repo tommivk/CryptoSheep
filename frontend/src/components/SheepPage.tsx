@@ -62,7 +62,7 @@ const SheepPage = ({ contract, account, blockData, contractState }: Props) => {
   if (!sheep) return <div>Loading..</div>;
 
   return (
-    <div className="grid grid-cols-1 grid-flow-row md:grid-cols-2 w-[900px] h-fit bg-slate-800 max-w-[95vw] rounded-lg m-auto mt-20 text-slate-300">
+    <div className="grid grid-cols-1 grid-flow-row md:grid-cols-2 w-[900px] h-fit bg-slate-800 dark:bg-gradient-to-r from-darkMain to-darkSecondary max-w-[95vw] rounded-lg m-auto mt-20 text-slate-300">
       <h1 className="col-span-1 md:col-span-2 row-span-1 mx-auto mt-10 mb-5 text-3xl">
         Sheep #{sheep.id}
       </h1>

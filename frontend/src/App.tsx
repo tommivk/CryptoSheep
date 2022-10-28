@@ -80,7 +80,7 @@ const App = () => {
     return <div>Loading</div>;
 
   return (
-    <div className="min-h-[100vh] dark:bg-[#13141a] dark:text-slate-200">
+    <div className="min-h-[100vh] dark:bg-darkBackground dark:text-slate-200">
       <button onClick={toggleDarkMode} className="absolute bottom-2 left-2">
         Toggle darkmode
       </button>
