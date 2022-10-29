@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Contract } from "web3-eth-contract";
-import { ContractState } from "../types";
 import Button from "./Button";
+import graySheep from "../images/graySheep.svg";
+import { ContractState } from "../types";
+import { Contract } from "web3-eth-contract";
+import NewSheepModal from "./NewSheepModal";
 
 type Props = {
   account: string | undefined;
@@ -11,39 +13,56 @@ type Props = {
 };
 
 const Mint = ({ account, connectWallet, contract, contractState }: Props) => {
-  const [sheepName, setSheepName] = useState("");
-
-  const { sheepCost } = contractState;
-
-  const mintSheep = async () => {
-    if (!account) return connectWallet();
-    if (!sheepName) return console.error("Name is required");
-
-    try {
-      await contract?.methods
-        .buySheep(sheepName)
-        .send({ from: account, value: sheepCost });
-      setSheepName("");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSheepName(event.target.value);
-  };
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState({
+    sheep1: false,
+    sheep2: false,
+    sheep3: false,
+  });
 
   return (
-    <div className="flex justify-center items-center mt-[30%]">
-      <div className="">
-        <input
-          placeholder="Sheep name"
-          type="text"
-          value={sheepName}
-          onChange={handleNameChange}
-          className="p-2 rounded-lg mr-2 text-slate-800 border-2 border-slate-600"
-        ></input>
-        <Button onClick={mintSheep}>Mint</Button>
+    <div className="h-[100vh] w-[100vw] absolute top-0  bg-sheepBG bg-no-repeat bg-cover">
+      {modalOpen && (
+        <NewSheepModal
+          account={account}
+          connectWallet={connectWallet}
+          contract={contract}
+          contractState={contractState}
+          setModalOpen={setModalOpen}
+        />
+      )}
+      <div className="overflow-hidden relative h-[100%] w-[100%]">
+        <Button
+          onClick={() => {
+            setModalOpen(true);
+            setIsHovered({ sheep1: true, sheep2: true, sheep3: true });
+          }}
+          className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+        >
+          Mint
+        </Button>
+
+        <img
+          onMouseOver={() => setIsHovered({ ...isHovered, sheep1: true })}
+          className={`mt-5 hidden md:block absolute h-40  left-[30vw] bottom-[27vh] ${
+            isHovered.sheep1 ? "animate-jump" : ""
+          }`}
+          src={graySheep}
+        ></img>
+        <img
+          onMouseOver={() => setIsHovered({ ...isHovered, sheep2: true })}
+          className={`mt-5 hidden md:block absolute h-60 right-[5vw] bottom-[10vh] ${
+            isHovered.sheep2 ? "animate-jump" : "animate-moveLeft"
+          }`}
+          src={graySheep}
+        ></img>
+        <img
+          onMouseOver={() => setIsHovered({ ...isHovered, sheep3: true })}
+          className={`mt-5 absolute h-60 bottom-[3vh] left-[10vw] ${
+            isHovered.sheep3 ? "animate-jump" : ""
+          }`}
+          src={graySheep}
+        ></img>
       </div>
     </div>
   );
