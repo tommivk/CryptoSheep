@@ -11,6 +11,7 @@ contract SheepPasture is SheepSVG {
     struct Sheep {
         uint32 id;
         string name;
+        string color;
         uint16 level;
         uint64 lastFeedTime;
         uint8 concecutiveFeedingDays;
@@ -21,12 +22,37 @@ contract SheepPasture is SheepSVG {
     mapping(uint => address) public sheepToOwner;
     mapping(address => uint) public ownerSheepCount;
 
+    string[] sheepColors = [
+        "#000000",
+        "#d5cebe",
+        "#35b9ca",
+        "#40bf50",
+        "#3744c8",
+        "#e46f1b"
+    ];
+
+    function getSheepColors() public view returns (string[] memory) {
+        return sheepColors;
+    }
+
     event NewSheep(address indexed _owner, uint32 _sheepId, string _name);
 
-    function buySheep(string memory _name) public payable {
+    function buySheep(string memory _name, string memory _color)
+        public
+        payable
+    {
         require(msg.value == sheepCost);
+
+        bool validColor = false;
+        for (uint i; i < sheepColors.length; i++) {
+            if (keccak256(bytes(sheepColors[i])) == keccak256(bytes(_color))) {
+                validColor = true;
+            }
+        }
+        require(validColor, "Invalid color");
+
         uint32 id = uint32(sheeps.length);
-        sheeps.push(Sheep(id, _name, 0, uint64(block.timestamp), 0));
+        sheeps.push(Sheep(id, _name, _color, 0, uint64(block.timestamp), 0));
         sheepToOwner[id] = msg.sender;
         ownerSheepCount[msg.sender]++;
         emit NewSheep(msg.sender, id, _name);
@@ -65,12 +91,36 @@ contract SheepPasture is SheepSVG {
         Sheep memory sheep = sheeps[_sheepId];
 
         if ((block.timestamp - sheep.lastFeedTime) < 1 days) {
-            return string.concat(SVGStart, SVGPath, happyFace, SVGEnd);
+            return
+                string.concat(
+                    SVGStart,
+                    SVGPathStart,
+                    sheep.color,
+                    SVGPath,
+                    happyFace,
+                    SVGEnd
+                );
         }
         if ((block.timestamp - sheep.lastFeedTime) < 2 days) {
-            return string.concat(SVGStart, SVGPath, neutralFace, SVGEnd);
+            return
+                string.concat(
+                    SVGStart,
+                    SVGPathStart,
+                    sheep.color,
+                    SVGPath,
+                    neutralFace,
+                    SVGEnd
+                );
         }
-        return string.concat(SVGStart, SVGPath, sadFace, SVGEnd);
+        return
+            string.concat(
+                SVGStart,
+                SVGPathStart,
+                sheep.color,
+                SVGPath,
+                sadFace,
+                SVGEnd
+            );
     }
 
     struct SheepResponse {
@@ -81,6 +131,7 @@ contract SheepPasture is SheepSVG {
         uint8 concecutiveFeedingDays;
         bool isAlive;
         string svg;
+        string color;
     }
 
     function getSheep(uint _sheepId)
@@ -93,6 +144,7 @@ contract SheepPasture is SheepSVG {
 
         sheepData.id = sheep.id;
         sheepData.name = sheep.name;
+        sheepData.color = sheep.color;
         sheepData.level = sheep.level;
         sheepData.lastFeedTime = sheep.lastFeedTime;
         sheepData.concecutiveFeedingDays = sheep.concecutiveFeedingDays;
@@ -115,6 +167,7 @@ contract SheepPasture is SheepSVG {
 
                 sheepData.id = sheep.id;
                 sheepData.name = sheep.name;
+                sheepData.color = sheep.color;
                 sheepData.level = sheep.level;
                 sheepData.lastFeedTime = sheep.lastFeedTime;
                 sheepData.concecutiveFeedingDays = sheep.concecutiveFeedingDays;
