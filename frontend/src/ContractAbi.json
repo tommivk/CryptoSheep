@@ -154,6 +154,11 @@
           "internalType": "string",
           "name": "_name",
           "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_color",
+          "type": "string"
         }
       ],
       "name": "buySheep",
@@ -265,6 +270,11 @@
               "internalType": "string",
               "name": "svg",
               "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "color",
+              "type": "string"
             }
           ],
           "internalType": "struct SheepPasture.SheepResponse[]",
@@ -321,11 +331,29 @@
               "internalType": "string",
               "name": "svg",
               "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "color",
+              "type": "string"
             }
           ],
           "internalType": "struct SheepPasture.SheepResponse",
           "name": "",
           "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getSheepColors",
+      "outputs": [
+        {
+          "internalType": "string[]",
+          "name": "",
+          "type": "string[]"
         }
       ],
       "stateMutability": "view",
@@ -544,6 +572,11 @@
         {
           "internalType": "string",
           "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "color",
           "type": "string"
         },
         {
