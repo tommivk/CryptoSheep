@@ -12,7 +12,7 @@ const Navigation = ({ account, connectWallet }: Props) => {
   };
 
   return (
-    <nav className="max-w-full p-3 h-navbarHeight z-50 relative">
+    <nav className="max-w-full p-3 h-navbarHeight z-40 relative">
       <ul className="flex items-center flex-wrap gap-2 ">
         <Link to="/" className="text-2xl font-semibold  tracking-tight">
           CryptoSheeps
