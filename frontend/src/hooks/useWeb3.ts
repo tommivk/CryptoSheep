@@ -17,9 +17,11 @@ const useWeb3 = () => {
       const sheepCost = await contract.methods.sheepCost().call();
       const feedingDeadline = await contract.methods.feedingDeadline().call();
       const feedingLockDuration = await contract.methods.feedingUnlock().call();
+      const sheepColors = await contract.methods.getSheepColors().call();
 
       setContractState({
         sheepCost: Number(sheepCost),
+        sheepColors,
         feedingDeadline: Number(feedingDeadline),
         feedingLockDuration: Number(feedingLockDuration),
       });

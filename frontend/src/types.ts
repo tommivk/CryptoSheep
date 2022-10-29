@@ -15,6 +15,7 @@ export type BlockData = {
 
 export type ContractState = {
   sheepCost: number;
+  sheepColors: Array<string>;
   feedingDeadline: number;
   feedingLockDuration: number;
 };
