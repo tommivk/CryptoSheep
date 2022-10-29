@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import Button from "./components/Button";
 import SheepList from "./components/SheepList";
 import SheepPage from "./components/SheepPage";
 import Navigation from "./components/Navigation";
