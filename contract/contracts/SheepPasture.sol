@@ -21,12 +21,15 @@ contract SheepPasture is SheepSVG {
     mapping(uint => address) public sheepToOwner;
     mapping(address => uint) public ownerSheepCount;
 
+    event NewSheep(address indexed _owner, uint32 _sheepId, string _name);
+
     function buySheep(string memory _name) public payable {
         require(msg.value == sheepCost);
         uint32 id = uint32(sheeps.length);
         sheeps.push(Sheep(id, _name, 0, uint64(block.timestamp), 0));
         sheepToOwner[id] = msg.sender;
         ownerSheepCount[msg.sender]++;
+        emit NewSheep(msg.sender, id, _name);
     }
 
     modifier onlySheepOwner(uint _sheepId) {
