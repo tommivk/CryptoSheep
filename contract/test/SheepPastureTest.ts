@@ -1,6 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
+const sheepColor = "#000000";
+
 describe("Sheep tests", () => {
   it("Constructor should set correct data", async () => {
     const Sheeps = await ethers.getContractFactory("SheepContract");
@@ -14,9 +16,11 @@ describe("Sheep tests", () => {
     const Sheeps = await ethers.getContractFactory("SheepContract");
     const sheeps = await Sheeps.deploy(200);
 
-    await expect(sheeps.buySheep("mySheep")).to.be.revertedWithoutReason();
     await expect(
-      sheeps.buySheep("mySheep", {
+      sheeps.buySheep("mySheep", sheepColor)
+    ).to.be.revertedWithoutReason();
+    await expect(
+      sheeps.buySheep("mySheep", sheepColor, {
         value: 199,
       })
     ).to.be.revertedWithoutReason();
@@ -28,7 +32,7 @@ describe("Sheep tests", () => {
     const Sheeps = await ethers.getContractFactory("SheepContract");
     const sheeps = await Sheeps.deploy(200);
 
-    await sheeps.buySheep("mySheep", { value: 200 });
+    await sheeps.buySheep("mySheep", sheepColor, { value: 200 });
     const sheep = await sheeps.sheeps(0);
 
     const blockNumber = await ethers.provider.getBlockNumber();
@@ -38,6 +42,7 @@ describe("Sheep tests", () => {
     expect(sheepOwner).to.equal(account.address);
 
     expect(sheep.name).to.equal("mySheep");
+    expect(sheep.color).to.equal(sheepColor);
     expect(sheep.concecutiveFeedingDays).to.equal(0);
     expect(sheep.level).to.equal(0);
     expect(sheep.lastFeedTime).to.not.equal(0);
@@ -49,7 +54,7 @@ describe("Sheep tests", () => {
 
     const Sheeps = await ethers.getContractFactory("SheepContract");
     const sheeps = await Sheeps.deploy(200);
-    await sheeps.buySheep("mySheep", { value: 200 });
+    await sheeps.buySheep("mySheep", sheepColor, { value: 200 });
 
     await expect(sheeps.feed(0)).to.revertedWithoutReason();
 
@@ -70,7 +75,7 @@ describe("Sheep tests", () => {
 
     const Sheeps = await ethers.getContractFactory("SheepContract");
     const sheeps = await Sheeps.deploy(200);
-    await sheeps.buySheep("mySheep", { value: 200 });
+    await sheeps.buySheep("mySheep", sheepColor, { value: 200 });
 
     await expect(sheeps.feed(0)).to.revertedWithoutReason();
 
@@ -83,7 +88,7 @@ describe("Sheep tests", () => {
     const [_accountA, accountB] = await ethers.getSigners();
     const Sheeps = await ethers.getContractFactory("SheepContract");
     const sheeps = await Sheeps.deploy(200);
-    await sheeps.buySheep("mySheep", { value: 200 });
+    await sheeps.buySheep("mySheep", sheepColor, { value: 200 });
 
     const oneDay = 1 * 24 * 60 * 60;
     await ethers.provider.send("evm_increaseTime", [oneDay]);
@@ -99,16 +104,21 @@ describe("Sheep tests", () => {
     const Sheeps = await ethers.getContractFactory("SheepContract");
     const sheeps = await Sheeps.deploy(200);
 
-    await sheeps.buySheep("sheep", { value: 200 });
-    await sheeps.buySheep("sheep2", { value: 200 });
-    await sheeps.connect(accountB).buySheep("sheep3", { value: 200 });
+    await sheeps.buySheep("sheep", sheepColor, { value: 200 });
+    await sheeps.buySheep("sheep2", sheepColor, { value: 200 });
+    await sheeps
+      .connect(accountB)
+      .buySheep("sheep3", sheepColor, { value: 200 });
 
     const sheepsA = await sheeps.getOwnedSheeps();
     const sheepsB = await sheeps.connect(accountB).getOwnedSheeps();
 
     expect(sheepsA.length).to.equal(2);
     expect(sheepsA[0].name).to.equal("sheep");
+    expect(sheepsA[0].color).to.equal(sheepColor);
+
     expect(sheepsA[1].name).to.equal("sheep2");
+    expect(sheepsA[1].color).to.equal(sheepColor);
 
     expect(sheepsB.length).to.equal(1);
     expect(sheepsB[0].name).to.equal("sheep3");
