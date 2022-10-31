@@ -69,7 +69,9 @@ const NewSheepModal = ({
           styles={{
             default: { card: { backgroundColor: "transparent" } },
           }}
-          className="block m-auto mb-5"
+          className={`block m-auto mb-5 ${
+            loading ? "pointer-events-none" : ""
+          }`}
           colors={contractState.sheepColors}
           triangle="hide"
           onChange={(color) => setSheepColor(color.hex)}
@@ -77,14 +79,19 @@ const NewSheepModal = ({
 
         <p className="text-center mb-2">Sheep name</p>
         <input
+          disabled={loading}
           placeholder="Sheep name"
           type="text"
           value={sheepName}
           onChange={handleNameChange}
-          className="mb-5 p-2 rounded-lg mr-2 text-slate-800 border-2 border-slate-600 m-auto block"
+          className="mb-5 p-2 rounded-lg mr-2 text-slate-800 border-2 border-slate-600 m-auto block disabled:bg-zinc-500"
         ></input>
 
-        <Button onClick={mintSheep} className="block m-auto mt-10">
+        <Button
+          onClick={mintSheep}
+          className="block m-auto mt-10"
+          disabled={loading}
+        >
           {loading ? <FontAwesomeIcon icon={faSpinner} spin /> : "Mint"}
         </Button>
       </div>
