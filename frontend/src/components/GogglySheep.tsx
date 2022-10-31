@@ -48,8 +48,8 @@ const GogglySheep = ({ sheepColor }: Props) => {
       const clientX = event.clientX;
       const clientY = event.clientY;
       const angleDeg = angle(clientX, clientY, anchorX, anchorY);
-      leftEye.style.transform = `rotate(${-90 + Math.ceil(angleDeg)}deg)`;
-      rightEye.style.transform = `rotate(${-90 + Math.ceil(angleDeg)}deg)`;
+      leftEye.style.transform = `rotate(${90 + Math.ceil(angleDeg)}deg)`;
+      rightEye.style.transform = `rotate(${90 + Math.ceil(angleDeg)}deg)`;
     };
     document.addEventListener("mousemove", onMouseMove);
 
@@ -58,22 +58,27 @@ const GogglySheep = ({ sheepColor }: Props) => {
 
   return (
     <div className="relative pt-30 w-[300px] h-[300px] m-auto bg-slate-800 rounded-md">
-      <img
-        ref={sheepRef}
-        className="m-auto mt-5"
-        src={`data:image/svg+xml;utf8,${encodeURIComponent(sheepSVG)}`}
-      ></img>
+      <div className="relative">
+        <img
+          className="m-auto mt-5"
+          src={`data:image/svg+xml;utf8,${encodeURIComponent(sheepSVG)}`}
+        ></img>
+        <span
+          ref={sheepRef}
+          className="absolute h-2 w-2 top-[110px] left-[80px]"
+        ></span>
+      </div>
       <div
         ref={leftEyeRef}
         className="h-5 w-5 bg-darkBackground rounded-full absolute top-[102px] left-[58px]"
       >
-        <div className="h-2 w-2 bg-gray-500 ml-1 rounded"></div>
+        <div className="h-2 w-2 bg-gray-500 ml-[6px] mt-3 rounded"></div>
       </div>
       <div
         ref={rightEyeRef}
         className="h-5 w-5 bg-darkBackground rounded-full absolute top-[102px] left-[86px]"
       >
-        <div className="h-2 w-2 bg-gray-500 ml-1 rounded"></div>
+        <div className="h-2 w-2 bg-gray-500 ml-[6px] mt-3 rounded"></div>
       </div>
     </div>
   );
