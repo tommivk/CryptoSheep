@@ -4,6 +4,8 @@ import { GithubPicker } from "react-color";
 import { ContractState } from "../types";
 import Button from "./Button";
 import GogglySheep from "./GogglySheep";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   account: string | undefined;
@@ -20,6 +22,7 @@ const NewSheepModal = ({
   contractState,
   setModalOpen,
 }: Props) => {
+  const [loading, setLoading] = useState(false);
   const [sheepName, setSheepName] = useState("");
   const [sheepColor, setSheepColor] = useState<string>(
     contractState.sheepColors[0]
@@ -30,6 +33,8 @@ const NewSheepModal = ({
     if (!account) return connectWallet();
     if (!sheepName) return console.error("Name is required");
 
+    setLoading(true);
+
     try {
       await contract?.methods
         .buySheep(sheepName, sheepColor)
@@ -37,6 +42,8 @@ const NewSheepModal = ({
       setSheepName("");
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,7 +85,7 @@ const NewSheepModal = ({
         ></input>
 
         <Button onClick={mintSheep} className="block m-auto mt-10">
-          Mint
+          {loading ? <FontAwesomeIcon icon={faSpinner} spin /> : "Mint"}
         </Button>
       </div>
     </div>
