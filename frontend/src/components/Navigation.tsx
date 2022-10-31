@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import Button from "./Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCopy } from "@fortawesome/free-regular-svg-icons";
 
 type Props = {
   account: string | undefined;
@@ -25,10 +27,14 @@ const Navigation = ({ account, connectWallet }: Props) => {
         </li>
         <li>
           {account ? (
-            <Button onClick={copyAddress}>
+            <Button onClick={copyAddress} className="group">
               {account.substring(0, 10)}
               {"..."}
-              {account.substring(account.length - 10)}
+              {account.substring(account.length - 10)}{" "}
+              <FontAwesomeIcon
+                icon={faCopy}
+                className="h-4 pl-2 group-hover:text-gray-400"
+              ></FontAwesomeIcon>
             </Button>
           ) : (
             <Button onClick={connectWallet}>Connect wallet</Button>

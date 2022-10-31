@@ -9,6 +9,8 @@ import useWeb3 from "./hooks/useWeb3";
 import { Sheep } from "./types";
 import { EventData } from "web3-eth-contract";
 import Mint from "./components/Mint";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSun, faMoon } from "@fortawesome/free-regular-svg-icons";
 
 const App = () => {
   const [ownedSheeps, setOwnedSheeps] = useState<Array<Sheep>>([]);
@@ -59,9 +61,12 @@ const App = () => {
 
   return (
     <div className="min-h-[100vh] dark:bg-darkBackground dark:text-slate-200">
-      <button onClick={toggleDarkMode} className="absolute bottom-2 left-2">
-        Toggle darkmode
-      </button>
+      <FontAwesomeIcon
+        onClick={toggleDarkMode}
+        icon={darkMode ? faSun : faMoon}
+        className="absolute bottom-8 left-8 h-6 text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-slate-200 cursor-pointer z-20"
+      />
+
       <Navigation account={account} connectWallet={connectWallet} />
       <Routes>
         <Route
