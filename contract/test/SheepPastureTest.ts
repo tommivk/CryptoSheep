@@ -56,6 +56,36 @@ describe("Sheep tests", () => {
     expect(sheep.lastFeedTime).to.equal(block.timestamp);
   });
 
+  it("Buying sheep should not be possible with invalid color value", async () => {
+    const Sheeps = await ethers.getContractFactory("SheepContract");
+    const sheeps = await Sheeps.deploy(200);
+
+    await expect(
+      sheeps.buySheep("mySheep", "#123456", {
+        value: 200,
+      })
+    ).to.be.revertedWith("Invalid color");
+    await expect(
+      sheeps.buySheep("mySheep", "#00000", {
+        value: 200,
+      })
+    ).to.be.revertedWith("Invalid color");
+    await expect(
+      sheeps.buySheep("mySheep", "0", {
+        value: 200,
+      })
+    ).to.be.revertedWith("Invalid color");
+  });
+
+  it("Bying sheep should work with all the allowed colors", async () => {
+    const Sheeps = await ethers.getContractFactory("SheepContract");
+    const sheeps = await Sheeps.deploy(200);
+    for (let i = 0; i < sheepColors.length; i++) {
+      await sheeps.buySheep("mySheep", sheepColors[i], { value: 200 });
+      expect((await sheeps.sheeps(i)).color).to.equal(sheepColors[i]);
+    }
+  });
+
   it("Feeding sheep should only be possible after 1 day", async () => {
     const oneDay = 1 * 24 * 60 * 60;
 
