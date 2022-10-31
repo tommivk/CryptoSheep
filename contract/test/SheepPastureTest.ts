@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
+const sheepCost = 200;
 const sheepColors = [
   "#000000",
   "#d5cebe",
@@ -13,15 +14,15 @@ const sheepColors = [
 describe("Sheep tests", () => {
   it("Constructor should set correct data", async () => {
     const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(200);
+    const sheeps = await Sheeps.deploy(sheepCost);
 
-    const sheepCost = await sheeps.sheepCost();
-    expect(sheepCost).to.equal(200);
+    let cost = await sheeps.sheepCost();
+    expect(cost).to.equal(sheepCost);
   });
 
   it("Buying sheep should fail when insufficient amount is sent", async () => {
     const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(200);
+    const sheeps = await Sheeps.deploy(sheepCost);
 
     await expect(
       sheeps.buySheep("mySheep", sheepColors[0])
@@ -37,9 +38,9 @@ describe("Sheep tests", () => {
     const [account] = await ethers.getSigners();
 
     const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(200);
+    const sheeps = await Sheeps.deploy(sheepCost);
 
-    await sheeps.buySheep("mySheep", sheepColors[0], { value: 200 });
+    await sheeps.buySheep("mySheep", sheepColors[0], { value: sheepCost });
     const sheep = await sheeps.sheeps(0);
 
     const blockNumber = await ethers.provider.getBlockNumber();
@@ -58,30 +59,30 @@ describe("Sheep tests", () => {
 
   it("Buying sheep should not be possible with invalid color value", async () => {
     const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(200);
+    const sheeps = await Sheeps.deploy(sheepCost);
 
     await expect(
       sheeps.buySheep("mySheep", "#123456", {
-        value: 200,
+        value: sheepCost,
       })
     ).to.be.revertedWith("Invalid color");
     await expect(
       sheeps.buySheep("mySheep", "#00000", {
-        value: 200,
+        value: sheepCost,
       })
     ).to.be.revertedWith("Invalid color");
     await expect(
       sheeps.buySheep("mySheep", "0", {
-        value: 200,
+        value: sheepCost,
       })
     ).to.be.revertedWith("Invalid color");
   });
 
   it("Bying sheep should work with all the allowed colors", async () => {
     const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(200);
+    const sheeps = await Sheeps.deploy(sheepCost);
     for (let i = 0; i < sheepColors.length; i++) {
-      await sheeps.buySheep("mySheep", sheepColors[i], { value: 200 });
+      await sheeps.buySheep("mySheep", sheepColors[i], { value: sheepCost });
       expect((await sheeps.sheeps(i)).color).to.equal(sheepColors[i]);
     }
   });
@@ -90,8 +91,8 @@ describe("Sheep tests", () => {
     const oneDay = 1 * 24 * 60 * 60;
 
     const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(200);
-    await sheeps.buySheep("mySheep", sheepColors[0], { value: 200 });
+    const sheeps = await Sheeps.deploy(sheepCost);
+    await sheeps.buySheep("mySheep", sheepColors[0], { value: sheepCost });
 
     await expect(sheeps.feed(0)).to.revertedWithoutReason();
 
@@ -111,8 +112,8 @@ describe("Sheep tests", () => {
     const threeDays = 3 * 24 * 60 * 60;
 
     const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(200);
-    await sheeps.buySheep("mySheep", sheepColors[0], { value: 200 });
+    const sheeps = await Sheeps.deploy(sheepCost);
+    await sheeps.buySheep("mySheep", sheepColors[0], { value: sheepCost });
 
     await expect(sheeps.feed(0)).to.revertedWithoutReason();
 
@@ -124,8 +125,8 @@ describe("Sheep tests", () => {
   it("Should not be possible to feed that you dont own", async () => {
     const [_accountA, accountB] = await ethers.getSigners();
     const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(200);
-    await sheeps.buySheep("mySheep", sheepColors[0], { value: 200 });
+    const sheeps = await Sheeps.deploy(sheepCost);
+    await sheeps.buySheep("mySheep", sheepColors[0], { value: sheepCost });
 
     const oneDay = 1 * 24 * 60 * 60;
     await ethers.provider.send("evm_increaseTime", [oneDay]);
@@ -139,13 +140,13 @@ describe("Sheep tests", () => {
   it("Getting all owned sheeps should return correct data", async () => {
     const [_accountA, accountB] = await ethers.getSigners();
     const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(200);
+    const sheeps = await Sheeps.deploy(sheepCost);
 
-    await sheeps.buySheep("sheep", sheepColors[0], { value: 200 });
-    await sheeps.buySheep("sheep2", sheepColors[0], { value: 200 });
+    await sheeps.buySheep("sheep", sheepColors[0], { value: sheepCost });
+    await sheeps.buySheep("sheep2", sheepColors[0], { value: sheepCost });
     await sheeps
       .connect(accountB)
-      .buySheep("sheep3", sheepColors[0], { value: 200 });
+      .buySheep("sheep3", sheepColors[0], { value: sheepCost });
 
     const sheepsA = await sheeps.getOwnedSheeps();
     const sheepsB = await sheeps.connect(accountB).getOwnedSheeps();
