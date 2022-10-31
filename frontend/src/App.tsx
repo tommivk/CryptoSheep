@@ -64,7 +64,7 @@ const App = () => {
       <FontAwesomeIcon
         onClick={toggleDarkMode}
         icon={darkMode ? faSun : faMoon}
-        className="absolute bottom-8 left-8 h-6 text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-slate-200 cursor-pointer z-20"
+        className="fixed bottom-8 left-8 h-6 text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-slate-200 cursor-pointer z-20"
       />
 
       <Navigation account={account} connectWallet={connectWallet} />
