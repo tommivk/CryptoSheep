@@ -18,6 +18,7 @@ const useFetchSheep = ({ id, contract, blockData }: Props) => {
         const sheep = await contract?.methods.getSheep(id).call();
         const owner = await contract.methods.sheepToOwner(sheep.id).call();
         setSheepData({ ...sheep, owner });
+        setError(false);
       } catch (error) {
         setError(true);
         setSheepData(undefined);
