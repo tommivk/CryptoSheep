@@ -112,6 +112,7 @@ const App = () => {
               contract={contract}
               blockData={blockData}
               contractState={contractState}
+              handleNotification={handleNotification}
             />
           }
         />

@@ -1,5 +1,5 @@
 import { Contract } from "web3-eth-contract";
-import { BlockData, ContractState } from "../types";
+import { BlockData, ContractState, NotificationMessage } from "../types";
 import { useParams } from "react-router-dom";
 import useFetchSheep from "../hooks/useFetchSheep";
 import SheepDetails from "./SheepDetails";
@@ -11,9 +11,16 @@ type Props = {
   account: string | undefined;
   blockData: BlockData;
   contractState: ContractState;
+  handleNotification: (params: NotificationMessage) => void;
 };
 
-const SheepPage = ({ contract, account, blockData, contractState }: Props) => {
+const SheepPage = ({
+  contract,
+  account,
+  blockData,
+  contractState,
+  handleNotification,
+}: Props) => {
   const { id } = useParams();
 
   const [sheep, error] = useFetchSheep({ id, blockData, contract });
@@ -25,6 +32,7 @@ const SheepPage = ({ contract, account, blockData, contractState }: Props) => {
     <Card className="mt-20">
       <SheepDetails sheep={sheep} account={account} />
       <SheepFeeding
+        handleNotification={handleNotification}
         account={account}
         sheep={sheep}
         blockData={blockData}

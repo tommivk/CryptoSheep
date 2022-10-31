@@ -1,5 +1,5 @@
 import useCountdown from "../hooks/useCountdown";
-import { BlockData, ContractState, Sheep } from "../types";
+import { BlockData, ContractState, NotificationMessage, Sheep } from "../types";
 import { Contract } from "web3-eth-contract";
 import Button from "./Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +12,7 @@ type Props = {
   blockData: BlockData;
   contractState: ContractState;
   account: string | undefined;
+  handleNotification: (params: NotificationMessage) => void;
 };
 
 const SheepFeeding = ({
@@ -20,6 +21,7 @@ const SheepFeeding = ({
   contract,
   blockData,
   account,
+  handleNotification,
 }: Props) => {
   const [loading, setLoading] = useState(false);
   const { feedingLockDuration, feedingDeadline } = contractState;
@@ -28,8 +30,16 @@ const SheepFeeding = ({
     try {
       setLoading(true);
       await contract.methods.feed(id).send({ from: account });
+      handleNotification({
+        message: "Sheep successfully feeded!",
+        type: "success",
+      });
     } catch (error) {
       console.error(error);
+      handleNotification({
+        message: "Failed to feed the sheep",
+        type: "error",
+      });
     } finally {
       setLoading(false);
     }
