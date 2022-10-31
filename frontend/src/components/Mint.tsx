@@ -44,14 +44,14 @@ const Mint = ({ account, connectWallet, contract, contractState }: Props) => {
 
         <img
           onMouseOver={() => setIsHovered({ ...isHovered, sheep1: true })}
-          className={`mt-5 hidden md:block absolute h-40  left-[30vw] bottom-[27vh] ${
+          className={`mt-5 hidden md:block absolute h-40  left-[30vw] bottom-[20vh] ${
             isHovered.sheep1 ? "animate-jump" : ""
           }`}
           src={graySheep}
         ></img>
         <img
           onMouseOver={() => setIsHovered({ ...isHovered, sheep2: true })}
-          className={`mt-5 hidden md:block absolute h-60 right-[5vw] bottom-[10vh] ${
+          className={`mt-5 hidden md:block absolute h-60 right-[5vw] bottom-[0vh] ${
             isHovered.sheep2 ? "animate-jump" : "animate-moveLeft"
           }`}
           src={graySheep}
