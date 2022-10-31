@@ -29,6 +29,9 @@ const Navigation = ({ account, connectWallet, handleNotification }: Props) => {
         <li className="ml-auto mr-20 font-medium">
           <Link to="/">Mint</Link>
         </li>
+        <li className="mr-20 font-medium">
+          <Link to="/search">Search</Link>
+        </li>
         <li className="mr-auto font-medium">
           <Link to="/sheep">My sheeps</Link>
         </li>

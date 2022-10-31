@@ -12,6 +12,7 @@ import Mint from "./components/Mint";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun, faMoon } from "@fortawesome/free-regular-svg-icons";
 import Notification from "./components/Notification";
+import SheepSearch from "./components/SheepSearch";
 
 const App = () => {
   const [ownedSheeps, setOwnedSheeps] = useState<Array<Sheep>>([]);
@@ -117,6 +118,16 @@ const App = () => {
         <Route
           path="/sheep"
           element={<SheepList sheeps={ownedSheeps} account={account} />}
+        />
+        <Route
+          path="/search"
+          element={
+            <SheepSearch
+              account={account}
+              contract={contract}
+              blockData={blockData}
+            />
+          }
         />
         <Route path="*" element={<div>404</div>} />
       </Routes>
