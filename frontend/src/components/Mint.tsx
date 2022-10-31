@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Button from "./Button";
 import graySheep from "../images/graySheep.svg";
-import { ContractState } from "../types";
+import { ContractState, NotificationMessage } from "../types";
 import { Contract } from "web3-eth-contract";
 import NewSheepModal from "./NewSheepModal";
 
@@ -10,9 +10,16 @@ type Props = {
   connectWallet: () => Promise<void>;
   contract: Contract;
   contractState: ContractState;
+  handleNotification: (params: NotificationMessage) => void;
 };
 
-const Mint = ({ account, connectWallet, contract, contractState }: Props) => {
+const Mint = ({
+  account,
+  connectWallet,
+  contract,
+  contractState,
+  handleNotification,
+}: Props) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isHovered, setIsHovered] = useState({
     sheep1: false,
@@ -29,6 +36,7 @@ const Mint = ({ account, connectWallet, contract, contractState }: Props) => {
           contract={contract}
           contractState={contractState}
           setModalOpen={setModalOpen}
+          handleNotification={handleNotification}
         />
       )}
       <div className="overflow-hidden relative h-[100%] w-[100%]">

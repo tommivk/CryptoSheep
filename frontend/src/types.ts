@@ -19,3 +19,8 @@ export type ContractState = {
   feedingDeadline: number;
   feedingLockDuration: number;
 };
+
+export type NotificationMessage = {
+  message: string;
+  type: "success" | "error";
+};

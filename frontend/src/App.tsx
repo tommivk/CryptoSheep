@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import SheepList from "./components/SheepList";
 import SheepPage from "./components/SheepPage";
@@ -6,15 +6,19 @@ import Navigation from "./components/Navigation";
 import useBlockData from "./hooks/useBlockData";
 import useWallet from "./hooks/useWallet";
 import useWeb3 from "./hooks/useWeb3";
-import { Sheep } from "./types";
+import { NotificationMessage, Sheep } from "./types";
 import { EventData } from "web3-eth-contract";
 import Mint from "./components/Mint";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun, faMoon } from "@fortawesome/free-regular-svg-icons";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [ownedSheeps, setOwnedSheeps] = useState<Array<Sheep>>([]);
   const [darkMode, setDarkMode] = useState(true);
+  const [notification, setNotification] = useState<
+    NotificationMessage | undefined
+  >();
 
   const [web3, contract, contractState] = useWeb3();
   const [account, connectWallet] = useWallet(web3);
@@ -56,6 +60,20 @@ const App = () => {
     setDarkMode((prev) => !prev);
   };
 
+  const notificationRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleNotification = ({ message, type }: NotificationMessage) => {
+    if (notificationRef.current) {
+      clearTimeout(notificationRef.current);
+    }
+    const timeout = setTimeout(() => {
+      setNotification(undefined);
+    }, 7000);
+
+    notificationRef.current = timeout;
+    setNotification({ message: message, type });
+  };
+
   if (!blockData || !web3 || !contract || !contractState)
     return <div>Loading</div>;
 
@@ -67,7 +85,11 @@ const App = () => {
         className="fixed bottom-8 left-8 h-6 text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-slate-200 cursor-pointer z-20"
       />
 
-      <Navigation account={account} connectWallet={connectWallet} />
+      <Navigation
+        account={account}
+        connectWallet={connectWallet}
+        handleNotification={handleNotification}
+      />
       <Routes>
         <Route
           path="/"
@@ -77,6 +99,7 @@ const App = () => {
               contract={contract}
               contractState={contractState}
               connectWallet={connectWallet}
+              handleNotification={handleNotification}
             />
           }
         />
@@ -97,6 +120,13 @@ const App = () => {
         />
         <Route path="*" element={<div>404</div>} />
       </Routes>
+
+      {notification && (
+        <Notification
+          notification={notification}
+          setNotification={setNotification}
+        />
+      )}
     </div>
   );
 };

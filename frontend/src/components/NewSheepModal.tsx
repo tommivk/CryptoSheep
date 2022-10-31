@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Contract } from "web3-eth-contract";
 import { GithubPicker } from "react-color";
-import { ContractState } from "../types";
+import { ContractState, NotificationMessage } from "../types";
 import Button from "./Button";
 import GogglySheep from "./GogglySheep";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,6 +13,7 @@ type Props = {
   contract: Contract;
   contractState: ContractState;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleNotification: (params: NotificationMessage) => void;
 };
 
 const NewSheepModal = ({
@@ -21,6 +22,7 @@ const NewSheepModal = ({
   contract,
   contractState,
   setModalOpen,
+  handleNotification,
 }: Props) => {
   const [loading, setLoading] = useState(false);
   const [sheepName, setSheepName] = useState("");
@@ -39,8 +41,18 @@ const NewSheepModal = ({
       await contract?.methods
         .buySheep(sheepName, sheepColor)
         .send({ from: account, value: sheepCost });
+
+      handleNotification({
+        message: `New sheep "${sheepName}" successfully minted!`,
+        type: "success",
+      });
+
       setSheepName("");
     } catch (error) {
+      handleNotification({
+        message: "Failed to mint sheep",
+        type: "error",
+      });
       console.error(error);
     } finally {
       setLoading(false);

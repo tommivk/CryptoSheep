@@ -2,15 +2,22 @@ import { Link } from "react-router-dom";
 import Button from "./Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-regular-svg-icons";
+import { NotificationMessage } from "../types";
 
 type Props = {
   account: string | undefined;
   connectWallet: () => Promise<void>;
+  handleNotification: (params: NotificationMessage) => void;
 };
 
-const Navigation = ({ account, connectWallet }: Props) => {
+const Navigation = ({ account, connectWallet, handleNotification }: Props) => {
   const copyAddress = () => {
-    navigator?.clipboard?.writeText(account!);
+    try {
+      navigator?.clipboard?.writeText(account!);
+      handleNotification({ message: "Address copied", type: "success" });
+    } catch (e) {
+      handleNotification({ message: "Couldn't copy address", type: "error" });
+    }
   };
 
   return (
