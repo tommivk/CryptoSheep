@@ -2,6 +2,9 @@ import useCountdown from "../hooks/useCountdown";
 import { BlockData, ContractState, Sheep } from "../types";
 import { Contract } from "web3-eth-contract";
 import Button from "./Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 
 type Props = {
   sheep: Sheep & { owner: string };
@@ -18,13 +21,17 @@ const SheepFeeding = ({
   blockData,
   account,
 }: Props) => {
+  const [loading, setLoading] = useState(false);
   const { feedingLockDuration, feedingDeadline } = contractState;
 
   const feed = async (id: string) => {
     try {
+      setLoading(true);
       await contract.methods.feed(id).send({ from: account });
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,7 +59,14 @@ const SheepFeeding = ({
               onClick={() => feed(sheep.id)}
               disabled={feedingUnlock > 0}
             >
-              {feedingUnlock > 0 && <span className="grayscale">🔒</span>} Feed
+              {loading ? (
+                <FontAwesomeIcon icon={faSpinner} spin />
+              ) : (
+                <>
+                  {feedingUnlock > 0 && <span className="grayscale">🔒</span>}{" "}
+                  Feed
+                </>
+              )}
             </Button>
           </>
         </div>
