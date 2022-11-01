@@ -15,7 +15,10 @@ module.exports = {
       colors: {
         darkBackground: "#13141a",
         darkMain: "#15171E",
-        darkSecondary: "#2c2d3382"
+        darkSecondary: "#2c2d3382",
+        lightBackground: "#f3f3f3",
+        lightSecondary: "#FFFFFF",
+        lightBorder: "#d1d5db"
       },
       keyframes: {
         moveOut: {
