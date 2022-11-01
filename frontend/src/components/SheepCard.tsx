@@ -18,7 +18,7 @@ const SheepCard = ({ sheep }: Props) => {
         src={`data:image/svg+xml;utf8,${encodeURIComponent(sheep.svg)}`}
       ></img>
       <div className="max-h-fit max-w-[100%]">
-        <h2 className="text-center bold pb-2 mt-2 text-xl font-bold">
+        <h2 className="text-center bold pb-2 px-3 mt-2 text-xl font-bold truncate">
           {sheep.name}
         </h2>
         <table className="m-auto">
