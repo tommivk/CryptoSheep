@@ -28,7 +28,7 @@ const Mint = ({
   });
 
   return (
-    <div className="h-[100vh] w-[100vw] absolute top-0  bg-sheepBG bg-no-repeat bg-cover">
+    <div className="h-[100vh] w-[100vw] absolute top-0  bg-sheepBG bg-no-repeat bg-cover bg-bottom">
       {modalOpen && (
         <NewSheepModal
           account={account}
