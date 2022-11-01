@@ -43,6 +43,9 @@ contract SheepPasture is SheepSVG {
     {
         require(msg.value == sheepCost);
 
+        uint nameByteLength = bytes(_name).length;
+        require(nameByteLength <= 50, "Maximum name size is 50 bytes");
+
         bool validColor = false;
         for (uint i; i < sheepColors.length; i++) {
             if (keccak256(bytes(sheepColors[i])) == keccak256(bytes(_color))) {
