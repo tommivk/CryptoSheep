@@ -17,7 +17,7 @@ const SheepDetails = ({ sheep, account }: Props) => {
       </h1>
       <div className="row-span-4">
         <img
-          className="w-[70%] m-auto mt-5 bg-lightSecondary  dark:bg-slate-700 rounded-md"
+          className="w-[70%] m-auto mt-5 border-lightBorder border-2 dark:border-none bg-lightSecondary  dark:bg-slate-700 rounded-md"
           src={`data:image/svg+xml;utf8,${encodeURIComponent(sheep.svg)}`}
         ></img>
       </div>
