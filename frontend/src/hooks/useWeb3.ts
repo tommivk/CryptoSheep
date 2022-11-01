@@ -5,7 +5,7 @@ import Web3 from "web3";
 import contractAbi from "../ContractAbi.json";
 import { ContractState } from "../types";
 
-const contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
+const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
 
 const useWeb3 = () => {
   const [web3, setWeb3] = useState<Web3>();
