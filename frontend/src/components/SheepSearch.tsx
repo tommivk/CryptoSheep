@@ -31,7 +31,7 @@ const SheepSearch = ({ contract, account, blockData }: Props) => {
           type="number"
           min={0}
           ref={inputRef}
-          className="m-auto text-slate-500 px-5 py-2 mr-2 rounded-md"
+          className="m-auto text-slate-500 px-5 py-2 mr-2 rounded-md border-2 border-lightBorder"
           placeholder="Sheep ID"
         ></input>
         <Button onClick={handleSearch}>Search</Button>

@@ -14,7 +14,7 @@ const Notification = ({ notification, setNotification }: Props) => {
   return (
     <div
       onClick={() => setNotification(undefined)}
-      className={`fixed z-50 cursor-pointer max-w-[90vw] bottom-5 right-5 flex items-center justify-center w-fit ${
+      className={`text-slate-300 fixed z-50 cursor-pointer max-w-[90vw] bottom-5 right-5 flex items-center justify-center w-fit ${
         notification.type === "success" ? "bg-blue-500" : "bg-red-500"
       } opacity-90 rounded-lg px-5 py-3`}
     >

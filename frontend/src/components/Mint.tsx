@@ -28,7 +28,7 @@ const Mint = ({
   });
 
   return (
-    <div className="h-[100vh] w-[100vw] absolute top-0  bg-sheepBG bg-no-repeat bg-cover bg-bottom">
+    <div className="h-[100vh] w-[100vw] absolute top-0 bg-slate-700 bg-sheepBG bg-no-repeat bg-cover bg-bottom">
       {modalOpen && (
         <NewSheepModal
           account={account}
@@ -45,7 +45,7 @@ const Mint = ({
             setModalOpen(true);
             setIsHovered({ sheep1: true, sheep2: true, sheep3: true });
           }}
-          className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-slate-100 font-bold bg-opacity-0 hover:bg-opacity-100 border-2 px-10 py-4 hover:bg-slate-200  hover:text-gray-600 "
+          className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  hover:text-gray-600 text-slate-100 font-bold bg-opacity-0 hover:bg-opacity-100 border-2 border-slate-100 px-10 py-4 hover:bg-slate-200"
         >
           Mint
         </Button>

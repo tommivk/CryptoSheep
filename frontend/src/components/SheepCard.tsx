@@ -11,10 +11,10 @@ const SheepCard = ({ sheep }: Props) => {
   ).toLocaleDateString();
 
   return (
-    <div className="w-[250px] bg-slate-800 dark:bg-darkMain max-w-screen box-border rounded-md text-slate-300 py-4 px-2">
+    <div className="w-[250px] text-slate-700 dark:text-slate-300 bg-white border-lightBorder border-2 dark:border-0 dark:bg-darkMain max-w-screen box-border rounded-md py-4 px-2">
       <h3 className="mb-2 mx-3 text-slate-400">#{sheep.id}</h3>
       <img
-        className="w-[95%] m-auto bg-slate-700"
+        className="w-[95%] m-auto  dark:bg-slate-700"
         src={`data:image/svg+xml;utf8,${encodeURIComponent(sheep.svg)}`}
       ></img>
       <div className="max-h-fit max-w-[100%]">

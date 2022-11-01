@@ -79,7 +79,7 @@ const App = () => {
     return <div>Loading</div>;
 
   return (
-    <div className="min-h-[100vh] dark:bg-darkBackground dark:text-slate-200">
+    <div className="min-h-[100vh] bg-lightBackground dark:bg-darkBackground dark:text-slate-200">
       <FontAwesomeIcon
         onClick={toggleDarkMode}
         icon={darkMode ? faSun : faMoon}

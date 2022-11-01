@@ -11,13 +11,13 @@ const SheepDetails = ({ sheep, account }: Props) => {
   const status = sheep?.isAlive ? "Alive" : "Dead";
 
   return (
-    <div className="mt-20 pb-10 grid grid-cols-1 grid-flow-row md:grid-cols-2 w-[900px] max-w-[95vw] h-fit">
+    <div className="pb-10 grid grid-cols-1 grid-flow-row md:grid-cols-2 w-[900px] max-w-[95vw] h-fit">
       <h1 className="col-span-1 md:col-span-2 row-span-1 mx-auto mt-10 mb-5 text-3xl">
         Sheep #{sheep.id}
       </h1>
       <div className="row-span-4">
         <img
-          className="w-[70%] m-auto mt-5 bg-slate-700 rounded-md"
+          className="w-[70%] m-auto mt-5 bg-lightSecondary  dark:bg-slate-700 rounded-md"
           src={`data:image/svg+xml;utf8,${encodeURIComponent(sheep.svg)}`}
         ></img>
       </div>

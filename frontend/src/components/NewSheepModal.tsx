@@ -77,7 +77,7 @@ const NewSheepModal = ({
   };
 
   return (
-    <div className="h-[100vh] w-[100vw] bg-[#0000009a] flex items-center justify-center absolute top-0 z-50">
+    <div className="h-[100vh] w-[100vw] bg-[#0000009a] flex items-center justify-center absolute top-0 z-50 text-slate-200">
       <div className="min-h-fit min-w-fit max-w-[90vw] bg-darkMain rounded-md px-2 py-10 md:p-10 relative">
         <div
           className="flex justify-center items-center cursor-pointer absolute top-1 right-1 p-4 bg-darkSecondary rounded-full w-10 h-10 hover:bg-[#3d3e42]"
