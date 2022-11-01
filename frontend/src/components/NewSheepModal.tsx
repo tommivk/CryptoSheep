@@ -33,7 +33,20 @@ const NewSheepModal = ({
 
   const mintSheep = async () => {
     if (!account) return connectWallet();
-    if (!sheepName) return console.error("Name is required");
+    if (!sheepName.trim()) {
+      setSheepName("");
+      return handleNotification({
+        message: "Name cannot be empty",
+        type: "error",
+      });
+    }
+    const nameBytes = new Blob([sheepName]);
+    if (nameBytes.size > 50) {
+      return handleNotification({
+        message: "Name is too long",
+        type: "error",
+      });
+    }
 
     setLoading(true);
 
