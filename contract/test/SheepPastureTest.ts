@@ -87,6 +87,21 @@ describe("Sheep tests", () => {
     }
   });
 
+  it("Bying sheep should not be possible when name is too long", async () => {
+    const Sheeps = await ethers.getContractFactory("SheepContract");
+    const sheeps = await Sheeps.deploy(sheepCost);
+
+    let name = new Array(51 + 1).join("a");
+    let nameSize = Buffer.from(name);
+    expect(nameSize.length).to.equal(51);
+
+    await expect(
+      sheeps.buySheep(name, sheepColors[0], {
+        value: sheepCost,
+      })
+    ).to.be.revertedWith("Maximum name size is 50 bytes");
+  });
+
   it("Feeding sheep should only be possible after 1 day", async () => {
     const oneDay = 1 * 24 * 60 * 60;
 
