@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { SheepContract } from "../typechain-types";
 
 const sheepCost = 200;
 const sheepColors = [
@@ -11,19 +12,21 @@ const sheepColors = [
   "#e46f1b",
 ];
 
+let Sheeps;
+let sheeps: SheepContract;
+
+beforeEach(async () => {
+  Sheeps = await ethers.getContractFactory("SheepContract");
+  sheeps = await Sheeps.deploy(sheepCost);
+});
+
 describe("Sheep tests", () => {
   it("Constructor should set correct data", async () => {
-    const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(sheepCost);
-
     let cost = await sheeps.sheepCost();
     expect(cost).to.equal(sheepCost);
   });
 
   it("Buying sheep should fail when insufficient amount is sent", async () => {
-    const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(sheepCost);
-
     await expect(
       sheeps.buySheep("mySheep", sheepColors[0])
     ).to.be.revertedWithoutReason();
@@ -36,9 +39,6 @@ describe("Sheep tests", () => {
 
   it("Buying sheep should work and set correct sheep data", async () => {
     const [account] = await ethers.getSigners();
-
-    const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(sheepCost);
 
     await sheeps.buySheep("mySheep", sheepColors[0], { value: sheepCost });
     const sheep = await sheeps.sheeps(0);
@@ -58,9 +58,6 @@ describe("Sheep tests", () => {
   });
 
   it("Buying sheep should not be possible with invalid color value", async () => {
-    const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(sheepCost);
-
     await expect(
       sheeps.buySheep("mySheep", "#123456", {
         value: sheepCost,
@@ -79,8 +76,6 @@ describe("Sheep tests", () => {
   });
 
   it("Bying sheep should work with all the allowed colors", async () => {
-    const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(sheepCost);
     for (let i = 0; i < sheepColors.length; i++) {
       await sheeps.buySheep("mySheep", sheepColors[i], { value: sheepCost });
       expect((await sheeps.sheeps(i)).color).to.equal(sheepColors[i]);
@@ -88,9 +83,6 @@ describe("Sheep tests", () => {
   });
 
   it("Bying sheep should not be possible when name is too long", async () => {
-    const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(sheepCost);
-
     let name = new Array(51 + 1).join("a");
     let nameSize = Buffer.from(name);
     expect(nameSize.length).to.equal(51);
@@ -105,8 +97,6 @@ describe("Sheep tests", () => {
   it("Feeding sheep should only be possible after 1 day", async () => {
     const oneDay = 1 * 24 * 60 * 60;
 
-    const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(sheepCost);
     await sheeps.buySheep("mySheep", sheepColors[0], { value: sheepCost });
 
     await expect(sheeps.feed(0)).to.revertedWithoutReason();
@@ -126,8 +116,6 @@ describe("Sheep tests", () => {
   it("Sheep should die if it has not been feeded in 3 days", async () => {
     const threeDays = 3 * 24 * 60 * 60;
 
-    const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(sheepCost);
     await sheeps.buySheep("mySheep", sheepColors[0], { value: sheepCost });
 
     await expect(sheeps.feed(0)).to.revertedWithoutReason();
@@ -139,8 +127,7 @@ describe("Sheep tests", () => {
 
   it("Should not be possible to feed that you dont own", async () => {
     const [_accountA, accountB] = await ethers.getSigners();
-    const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(sheepCost);
+
     await sheeps.buySheep("mySheep", sheepColors[0], { value: sheepCost });
 
     const oneDay = 1 * 24 * 60 * 60;
@@ -154,8 +141,6 @@ describe("Sheep tests", () => {
 
   it("Getting all owned sheeps should return correct data", async () => {
     const [_accountA, accountB] = await ethers.getSigners();
-    const Sheeps = await ethers.getContractFactory("SheepContract");
-    const sheeps = await Sheeps.deploy(sheepCost);
 
     await sheeps.buySheep("sheep", sheepColors[0], { value: sheepCost });
     await sheeps.buySheep("sheep2", sheepColors[0], { value: sheepCost });
