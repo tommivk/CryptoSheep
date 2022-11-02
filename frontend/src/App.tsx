@@ -22,8 +22,8 @@ const App = () => {
   >();
 
   const [web3, contract, contractState] = useWeb3();
-  const [account, connectWallet] = useWallet(web3);
   const [blockData] = useBlockData(web3);
+  const [account, balance, connectWallet] = useWallet({ web3, blockData });
 
   const navigate = useNavigate();
 
@@ -88,6 +88,7 @@ const App = () => {
 
       <Navigation
         account={account}
+        balance={balance}
         connectWallet={connectWallet}
         handleNotification={handleNotification}
       />

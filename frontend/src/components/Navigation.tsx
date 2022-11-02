@@ -12,11 +12,17 @@ import {
 
 type Props = {
   account: string | undefined;
+  balance: string | undefined;
   connectWallet: () => Promise<void>;
   handleNotification: (params: NotificationMessage) => void;
 };
 
-const Navigation = ({ account, connectWallet, handleNotification }: Props) => {
+const Navigation = ({
+  account,
+  balance,
+  connectWallet,
+  handleNotification,
+}: Props) => {
   const copyAddress = () => {
     try {
       navigator?.clipboard?.writeText(account!);
@@ -106,9 +112,7 @@ const Navigation = ({ account, connectWallet, handleNotification }: Props) => {
                         </div>
                         <div>
                           <p className="text-4xl text-center mt-4">ETH</p>
-                          <p className="text-center mt-2">
-                            0.00000000000000000
-                          </p>
+                          <p className="text-center mt-2">{balance}</p>
                         </div>
                       </div>
                     </Menu.Item>

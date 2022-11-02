@@ -1,8 +1,15 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Web3 from "web3";
+import { BlockData } from "../types";
 
-const useWallet = (web3: Web3 | undefined) => {
+type Props = {
+  web3: Web3 | undefined;
+  blockData: BlockData | undefined;
+};
+
+const useWallet = ({ web3, blockData }: Props) => {
   const [account, setAccount] = useState<string>();
+  const [balance, setBalance] = useState<string>();
 
   const connectWallet = async () => {
     if (!web3) return;
@@ -15,19 +22,35 @@ const useWallet = (web3: Web3 | undefined) => {
     }
   };
 
-  const loadAccount = async () => {
+  const updateBalance = useCallback(async () => {
+    if (!web3 || !account) return;
+    try {
+      const balanceWei = await web3.eth.getBalance(account);
+      const balanceETH = web3.utils.fromWei(balanceWei);
+      setBalance(balanceETH);
+    } catch (error) {
+      setBalance(undefined);
+      console.error(error);
+    }
+  }, [web3, account]);
+
+  useEffect(() => {
+    updateBalance();
+  }, [updateBalance, blockData?.blockNumber, account]);
+
+  const loadAccount = useCallback(async () => {
     if (!web3) return;
     const [account] = await web3.eth.getAccounts();
     if (account) {
       setAccount(account);
     }
-  };
+  }, [web3]);
 
   useEffect(() => {
     loadAccount();
-  }, [web3]);
+  }, [loadAccount, web3]);
 
-  return [account, connectWallet] as const;
+  return [account, balance, connectWallet] as const;
 };
 
 export default useWallet;
