@@ -37,12 +37,7 @@ contract SheepPasture is SheepSVG {
 
     event NewSheep(address indexed _owner, uint32 _sheepId, string _name);
 
-    function buySheep(string memory _name, string memory _color)
-        public
-        payable
-    {
-        require(msg.value == sheepCost);
-
+    function buySheep(string memory _name, string memory _color) internal {
         uint nameByteLength = bytes(_name).length;
         require(nameByteLength <= 50, "Maximum name size is 50 bytes");
 
