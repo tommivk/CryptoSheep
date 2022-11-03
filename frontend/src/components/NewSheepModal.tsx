@@ -52,7 +52,7 @@ const NewSheepModal = ({
 
     try {
       await contract?.methods
-        .buySheep(sheepName, sheepColor)
+        .mint(sheepName, sheepColor)
         .send({ from: account, value: sheepCost });
 
       handleNotification({
