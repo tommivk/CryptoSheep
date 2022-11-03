@@ -55,7 +55,7 @@ contract SheepPasture is SheepSVG {
         require(validColor, "Invalid color");
 
         uint32 id = uint32(sheeps.length);
-        sheeps.push(Sheep(id, _name, _color, 0, uint64(block.timestamp), 0));
+        sheeps.push(Sheep(id, _name, _color, 1, uint64(block.timestamp), 0));
         sheepToOwner[id] = msg.sender;
         ownerSheepCount[msg.sender]++;
         emit NewSheep(msg.sender, id, _name);
