@@ -9,6 +9,8 @@ import "./ERC721Metadata.sol";
 
 import "./Base64.sol";
 
+import "@openzeppelin/contracts/utils/Strings.sol";
+
 contract SheepContract is SheepPasture, ERC721, ERC721Metadata {
     mapping(uint => address) approvals;
     mapping(address => mapping(address => bool)) authorized;
@@ -131,28 +133,57 @@ contract SheepContract is SheepPasture, ERC721, ERC721Metadata {
         Sheep memory sheep = sheeps[_tokenId];
 
         string memory svgData = getSheepSVG(_tokenId);
-        string memory isAlive = checkIsAlive(sheep) ? "true" : "false";
-        string memory json = Base64.encode(
-            bytes(
-                string(
-                    abi.encodePacked(
-                        '{"name": "Sheep", "description": "Sheep NFT", "image": "',
-                        bytes(svgData),
-                        '","attributes": [{',
-                        '"sheepName": "',
-                        sheep.name,
-                        '",',
-                        '"isAlive":',
-                        '"',
-                        isAlive,
-                        '"',
-                        "}]",
-                        "}"
+        string memory status = checkIsAlive(sheep) ? "Alive" : "Dead";
+        string memory title = string(
+            abi.encodePacked("Sheep #", Strings.toString(sheep.id))
+        );
+
+        return
+            string(
+                abi.encodePacked(
+                    "data:application/json;base64,",
+                    Base64.encode(
+                        bytes(
+                            string(
+                                abi.encodePacked(
+                                    '{"name": "',
+                                    title,
+                                    '", "description": "',
+                                    "Sheep NFT",
+                                    '",'
+                                    '"image_data": "',
+                                    bytes(svgData),
+                                    '",',
+                                    '"attributes": [{"trait_type": "Name", "value": ',
+                                    '"',
+                                    sheep.name,
+                                    '"',
+                                    "},",
+                                    '{"trait_type": "Status", "value": ',
+                                    '"',
+                                    status,
+                                    '"',
+                                    "},",
+                                    '{"trait_type": "Color", "value": ',
+                                    '"',
+                                    sheep.color,
+                                    '"',
+                                    "},",
+                                    '{"trait_type": "Level", "value": ',
+                                    Strings.toString(sheep.level),
+                                    "},",
+                                    '{"display_type": "date", "trait_type": "Last feeded", "value": ',
+                                    Strings.toString(
+                                        uint256(sheep.lastFeedTime)
+                                    ),
+                                    "}"
+                                    "]}"
+                                )
+                            )
+                        )
                     )
                 )
-            )
-        );
-        return json;
+            );
     }
 
     bytes4 ERC721_ID = 0x80ac58cd;
