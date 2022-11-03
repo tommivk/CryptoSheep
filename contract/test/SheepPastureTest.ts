@@ -26,21 +26,21 @@ describe("Sheep tests", () => {
     expect(cost).to.equal(sheepCost);
   });
 
-  it("Buying sheep should fail when insufficient amount is sent", async () => {
+  it("Minting sheep should fail when insufficient amount is sent", async () => {
     await expect(
-      sheeps.buySheep("mySheep", sheepColors[0])
+      sheeps.mint("mySheep", sheepColors[0])
     ).to.be.revertedWithoutReason();
     await expect(
-      sheeps.buySheep("mySheep", sheepColors[0], {
+      sheeps.mint("mySheep", sheepColors[0], {
         value: 199,
       })
     ).to.be.revertedWithoutReason();
   });
 
-  it("Buying sheep should work and set correct sheep data", async () => {
+  it("Minting sheep should work and set correct sheep data", async () => {
     const [account] = await ethers.getSigners();
 
-    await sheeps.buySheep("mySheep", sheepColors[0], { value: sheepCost });
+    await sheeps.mint("mySheep", sheepColors[0], { value: sheepCost });
     const sheep = await sheeps.sheeps(0);
 
     const blockNumber = await ethers.provider.getBlockNumber();
@@ -52,43 +52,43 @@ describe("Sheep tests", () => {
     expect(sheep.name).to.equal("mySheep");
     expect(sheep.color).to.equal(sheepColors[0]);
     expect(sheep.concecutiveFeedingDays).to.equal(0);
-    expect(sheep.level).to.equal(0);
+    expect(sheep.level).to.equal(1);
     expect(sheep.lastFeedTime).to.not.equal(0);
     expect(sheep.lastFeedTime).to.equal(block.timestamp);
   });
 
-  it("Buying sheep should not be possible with invalid color value", async () => {
+  it("Minting sheep should not be possible with invalid color value", async () => {
     await expect(
-      sheeps.buySheep("mySheep", "#123456", {
+      sheeps.mint("mySheep", "#123456", {
         value: sheepCost,
       })
     ).to.be.revertedWith("Invalid color");
     await expect(
-      sheeps.buySheep("mySheep", "#00000", {
+      sheeps.mint("mySheep", "#00000", {
         value: sheepCost,
       })
     ).to.be.revertedWith("Invalid color");
     await expect(
-      sheeps.buySheep("mySheep", "0", {
+      sheeps.mint("mySheep", "0", {
         value: sheepCost,
       })
     ).to.be.revertedWith("Invalid color");
   });
 
-  it("Bying sheep should work with all the allowed colors", async () => {
+  it("Minting sheep should work with all the allowed colors", async () => {
     for (let i = 0; i < sheepColors.length; i++) {
-      await sheeps.buySheep("mySheep", sheepColors[i], { value: sheepCost });
+      await sheeps.mint("mySheep", sheepColors[i], { value: sheepCost });
       expect((await sheeps.sheeps(i)).color).to.equal(sheepColors[i]);
     }
   });
 
-  it("Bying sheep should not be possible when name is too long", async () => {
+  it("Minting sheep should not be possible when name is too long", async () => {
     let name = new Array(51 + 1).join("a");
     let nameSize = Buffer.from(name);
     expect(nameSize.length).to.equal(51);
 
     await expect(
-      sheeps.buySheep(name, sheepColors[0], {
+      sheeps.mint(name, sheepColors[0], {
         value: sheepCost,
       })
     ).to.be.revertedWith("Maximum name size is 50 bytes");
@@ -97,7 +97,7 @@ describe("Sheep tests", () => {
   it("Feeding sheep should only be possible after 1 day", async () => {
     const oneDay = 1 * 24 * 60 * 60;
 
-    await sheeps.buySheep("mySheep", sheepColors[0], { value: sheepCost });
+    await sheeps.mint("mySheep", sheepColors[0], { value: sheepCost });
 
     await expect(sheeps.feed(0)).to.revertedWithoutReason();
 
@@ -116,7 +116,7 @@ describe("Sheep tests", () => {
   it("Sheep should die if it has not been feeded in 3 days", async () => {
     const threeDays = 3 * 24 * 60 * 60;
 
-    await sheeps.buySheep("mySheep", sheepColors[0], { value: sheepCost });
+    await sheeps.mint("mySheep", sheepColors[0], { value: sheepCost });
 
     await expect(sheeps.feed(0)).to.revertedWithoutReason();
 
@@ -128,7 +128,7 @@ describe("Sheep tests", () => {
   it("Should not be possible to feed that you dont own", async () => {
     const [_accountA, accountB] = await ethers.getSigners();
 
-    await sheeps.buySheep("mySheep", sheepColors[0], { value: sheepCost });
+    await sheeps.mint("mySheep", sheepColors[0], { value: sheepCost });
 
     const oneDay = 1 * 24 * 60 * 60;
     await ethers.provider.send("evm_increaseTime", [oneDay]);
@@ -142,11 +142,11 @@ describe("Sheep tests", () => {
   it("Getting all owned sheeps should return correct data", async () => {
     const [_accountA, accountB] = await ethers.getSigners();
 
-    await sheeps.buySheep("sheep", sheepColors[0], { value: sheepCost });
-    await sheeps.buySheep("sheep2", sheepColors[0], { value: sheepCost });
+    await sheeps.mint("sheep", sheepColors[0], { value: sheepCost });
+    await sheeps.mint("sheep2", sheepColors[0], { value: sheepCost });
     await sheeps
       .connect(accountB)
-      .buySheep("sheep3", sheepColors[0], { value: sheepCost });
+      .mint("sheep3", sheepColors[0], { value: sheepCost });
 
     const sheepsA = await sheeps.getOwnedSheeps();
     const sheepsB = await sheeps.connect(accountB).getOwnedSheeps();
