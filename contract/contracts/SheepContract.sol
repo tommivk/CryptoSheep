@@ -29,8 +29,7 @@ contract SheepContract is SheepPasture, ERC721, ERC721Metadata {
 
     function mint(string memory _name, string memory _color) public payable {
         require(msg.value >= sheepCost);
-        uint tokenId = sheeps.length;
-        buySheep(_name, _color);
+        uint tokenId = buySheep(_name, _color);
         emit Transfer(address(0), msg.sender, tokenId);
     }
 
