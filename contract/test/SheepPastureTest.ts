@@ -57,6 +57,20 @@ describe("Sheep tests", () => {
     expect(sheep.lastFeedTime).to.equal(block.timestamp);
   });
 
+  it("Minting sheep should emit Transfer event with correct args", async () => {
+    const [account] = await ethers.getSigners();
+    await expect(
+      await sheeps.mint("mySheep", sheepColors[0], { value: sheepCost })
+    )
+      .to.emit(sheeps, "Transfer")
+      .withArgs(ethers.constants.AddressZero, account.address, "0");
+    await expect(
+      await sheeps.mint("mySheep", sheepColors[0], { value: sheepCost })
+    )
+      .to.emit(sheeps, "Transfer")
+      .withArgs(ethers.constants.AddressZero, account.address, "1");
+  });
+
   it("Minting sheep should not be possible with invalid color value", async () => {
     await expect(
       sheeps.mint("mySheep", "#123456", {
