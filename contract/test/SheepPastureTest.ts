@@ -153,7 +153,7 @@ describe("Sheep tests", () => {
     ).to.be.revertedWithoutReason();
   });
 
-  it("Getting all owned sheeps should return correct data", async () => {
+  it("getOwnedSheeps should return correct sheep Ids", async () => {
     const [_accountA, accountB] = await ethers.getSigners();
 
     await sheeps.mint("sheep", sheepColors[0], { value: sheepCost });
@@ -166,13 +166,10 @@ describe("Sheep tests", () => {
     const sheepsB = await sheeps.connect(accountB).getOwnedSheeps();
 
     expect(sheepsA.length).to.equal(2);
-    expect(sheepsA[0].name).to.equal("sheep");
-    expect(sheepsA[0].color).to.equal(sheepColors[0]);
-
-    expect(sheepsA[1].name).to.equal("sheep2");
-    expect(sheepsA[1].color).to.equal(sheepColors[0]);
+    expect(sheepsA[0]).to.equal("0");
+    expect(sheepsA[1]).to.equal("1");
 
     expect(sheepsB.length).to.equal(1);
-    expect(sheepsB[0].name).to.equal("sheep3");
+    expect(sheepsB[0]).to.equal("2");
   });
 });
