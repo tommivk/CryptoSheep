@@ -1,48 +1,95 @@
-import { useEffect, useState } from "react";
-import { AbiItem } from "web3-utils";
-import { Contract } from "web3-eth-contract";
+import { useCallback, useEffect, useState } from "react";
 import Web3 from "web3";
-import contractAbi from "../ContractAbi.json";
-import { ContractState } from "../types";
 
-const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
+const INFURA_API_KEY = import.meta.env.VITE_INFURA_API_KEY;
+const GOERLI_NETWORK_ID = 5;
 
 const useWeb3 = () => {
   const [web3, setWeb3] = useState<Web3>();
-  const [contract, setContract] = useState<Contract>();
-  const [contractState, setContractState] = useState<ContractState>();
+  const [wrongNetworkError, setWrongNetworkError] = useState<boolean>(false);
 
-  const getContractState = async (contract: Contract) => {
+  const isCorrectNetwork = async (web3: Web3) => {
+    const networkId = await web3.eth.net.getId();
+    if (networkId !== GOERLI_NETWORK_ID) {
+      return false;
+    }
+    return true;
+  };
+
+  const promptChainChange = async () => {
+    await window.ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: `0x5` }],
+    });
+  };
+
+  const connectWallet = async () => {
+    if (window.ethereum) {
+      try {
+        const web3 = new Web3(Web3.givenProvider);
+
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+        setWeb3(web3);
+
+        const correctNetwork = await isCorrectNetwork(web3);
+        if (!correctNetwork) {
+          setWrongNetworkError(true);
+          await promptChainChange();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      console.error("No compatible wallet found");
+    }
+  };
+
+  const initialize = useCallback(async () => {
     try {
-      const sheepCost = await contract.methods.sheepCost().call();
-      const feedingDeadline = await contract.methods.feedingDeadline().call();
-      const feedingLockDuration = await contract.methods.feedingUnlock().call();
-      const sheepColors = await contract.methods.getSheepColors().call();
-
-      setContractState({
-        sheepCost: Number(sheepCost),
-        sheepColors,
-        feedingDeadline: Number(feedingDeadline),
-        feedingLockDuration: Number(feedingLockDuration),
+      // Check if there is an account connected
+      const accounts = await window?.ethereum?.request?.({
+        method: "eth_accounts",
       });
+
+      let provider = Web3.givenProvider;
+
+      if (!accounts || accounts.length === 0) {
+        provider = new Web3.providers.HttpProvider(INFURA_API_KEY);
+      }
+
+      const web3 = new Web3(provider);
+      const correctNetwork = await isCorrectNetwork(web3);
+      if (!correctNetwork) {
+        setWrongNetworkError(true);
+        return await promptChainChange();
+      }
+
+      setWrongNetworkError(false);
+      setWeb3(web3);
     } catch (error) {
       console.error(error);
+    }
+  }, []);
+
+  const checkDisconnect = async (accounts: Array<String>) => {
+    if (!accounts || accounts.length === 0) {
+      setWeb3(new Web3(new Web3.providers.HttpProvider(INFURA_API_KEY)));
     }
   };
 
   useEffect(() => {
-    const web3 = new Web3(Web3.givenProvider ?? "ws://localhost:8545");
-    setWeb3(web3);
+    initialize();
 
-    const contract = new web3.eth.Contract(
-      contractAbi.abi as AbiItem[],
-      contractAddress
-    );
-    getContractState(contract);
-    setContract(contract);
-  }, []);
+    window?.ethereum?.on("accountsChanged", checkDisconnect);
+    window?.ethereum?.on("chainChanged", initialize);
 
-  return [web3, contract, contractState] as const;
+    return () => {
+      window?.ethereum?.removeListener("accountsChanged", checkDisconnect);
+      window?.ethereum?.removeListener("chainChanged", initialize);
+    };
+  }, [initialize]);
+
+  return [web3, wrongNetworkError, connectWallet] as const;
 };
 
 export default useWeb3;
