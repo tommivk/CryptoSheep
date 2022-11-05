@@ -32,7 +32,6 @@ const NewSheepModal = ({
   const { sheepCost } = contractState;
 
   const mintSheep = async () => {
-    if (!account) return connectWallet();
     if (!sheepName.trim()) {
       setSheepName("");
       return handleNotification({
@@ -61,7 +60,8 @@ const NewSheepModal = ({
       });
 
       setSheepName("");
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.code === 4001) return; // Cancelled by user
       handleNotification({
         message: "Failed to mint sheep",
         type: "error",
@@ -74,6 +74,12 @@ const NewSheepModal = ({
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSheepName(event.target.value);
+  };
+
+  const handleConnectWallet = async () => {
+    setLoading(true);
+    await connectWallet();
+    setLoading(false);
   };
 
   return (
@@ -112,13 +118,27 @@ const NewSheepModal = ({
           className="mb-5 p-2 rounded-lg mr-2 text-slate-800 border-2 border-slate-600 m-auto block disabled:bg-zinc-500"
         ></input>
 
-        <Button
-          onClick={mintSheep}
-          className="block m-auto mt-10"
-          disabled={loading}
-        >
-          {loading ? <FontAwesomeIcon icon={faSpinner} spin /> : "Mint"}
-        </Button>
+        {account ? (
+          <Button
+            onClick={mintSheep}
+            className="block m-auto mt-10"
+            disabled={loading}
+          >
+            {loading ? <FontAwesomeIcon icon={faSpinner} spin /> : "Mint"}
+          </Button>
+        ) : (
+          <Button
+            onClick={handleConnectWallet}
+            className="block m-auto mt-10"
+            disabled={loading}
+          >
+            {loading ? (
+              <FontAwesomeIcon icon={faSpinner} spin />
+            ) : (
+              "Connect wallet"
+            )}
+          </Button>
+        )}
       </div>
     </div>
   );
