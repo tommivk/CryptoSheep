@@ -133,6 +133,7 @@ contract SheepPasture is SheepSVG {
 
     struct SheepResponse {
         uint32 id;
+        address owner;
         string name;
         uint16 level;
         uint64 lastFeedTime;
@@ -151,6 +152,7 @@ contract SheepPasture is SheepSVG {
         SheepResponse memory sheepData;
 
         sheepData.id = sheep.id;
+        sheepData.owner = sheepToOwner[sheep.id];
         sheepData.name = sheep.name;
         sheepData.color = sheep.color;
         sheepData.level = sheep.level;
