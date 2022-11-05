@@ -217,51 +217,9 @@
       "name": "getOwnedSheeps",
       "outputs": [
         {
-          "components": [
-            {
-              "internalType": "uint32",
-              "name": "id",
-              "type": "uint32"
-            },
-            {
-              "internalType": "string",
-              "name": "name",
-              "type": "string"
-            },
-            {
-              "internalType": "uint16",
-              "name": "level",
-              "type": "uint16"
-            },
-            {
-              "internalType": "uint64",
-              "name": "lastFeedTime",
-              "type": "uint64"
-            },
-            {
-              "internalType": "uint8",
-              "name": "concecutiveFeedingDays",
-              "type": "uint8"
-            },
-            {
-              "internalType": "bool",
-              "name": "isAlive",
-              "type": "bool"
-            },
-            {
-              "internalType": "string",
-              "name": "svg",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "color",
-              "type": "string"
-            }
-          ],
-          "internalType": "struct SheepPasture.SheepResponse[]",
+          "internalType": "uint256[]",
           "name": "",
-          "type": "tuple[]"
+          "type": "uint256[]"
         }
       ],
       "stateMutability": "view",
@@ -283,6 +241,11 @@
               "internalType": "uint32",
               "name": "id",
               "type": "uint32"
+            },
+            {
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
             },
             {
               "internalType": "string",
@@ -644,6 +607,19 @@
           "internalType": "string",
           "name": "",
           "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalSheepCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",
