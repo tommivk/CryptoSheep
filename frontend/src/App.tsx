@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun, faMoon } from "@fortawesome/free-regular-svg-icons";
 import Notification from "./components/Notification";
 import SheepSearch from "./components/SheepSearch";
+import ErrorPage from "./components/ErrorPage";
 
 const App = () => {
   const [ownedSheeps, setOwnedSheeps] = useState<Array<Sheep>>([]);
@@ -79,8 +80,20 @@ const App = () => {
     setNotification({ message: message, type });
   };
 
-  if (!blockData || !web3 || !contract || !contractState)
-    return <div>Loading</div>;
+  if (wrongNetworkError) {
+    return (
+      <div className="min-h-[100vh] bg-lightBackground dark:bg-darkBackground dark:text-slate-200">
+        <Navigation
+          account={account}
+          balance={balance}
+          connectWallet={connectWallet}
+          handleNotification={handleNotification}
+        />
+        <ErrorPage text="Please switch to Goerli network" />
+      </div>
+    );
+  }
+  if (!blockData || !contract || !contractState) return <div>Loading</div>;
 
   return (
     <div className="min-h-[100vh] bg-lightBackground dark:bg-darkBackground dark:text-slate-200">
@@ -135,7 +148,7 @@ const App = () => {
             />
           }
         />
-        <Route path="*" element={<div>404</div>} />
+        <Route path="*" element={<ErrorPage code={404} text="Not found" />} />
       </Routes>
 
       {notification && (
