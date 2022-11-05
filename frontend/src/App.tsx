@@ -4,8 +4,10 @@ import SheepList from "./components/SheepList";
 import SheepPage from "./components/SheepPage";
 import Navigation from "./components/Navigation";
 import useBlockData from "./hooks/useBlockData";
-import useWallet from "./hooks/useWallet";
+import useBalance from "./hooks/useBalance";
 import useWeb3 from "./hooks/useWeb3";
+import useContract from "./hooks/useContract";
+import useAccount from "./hooks/useAccount";
 import { NotificationMessage, Sheep } from "./types";
 import { EventData } from "web3-eth-contract";
 import Mint from "./components/Mint";
@@ -21,9 +23,11 @@ const App = () => {
     NotificationMessage | undefined
   >();
 
-  const [web3, contract, contractState] = useWeb3();
+  const [web3, wrongNetworkError, connectWallet] = useWeb3();
+  const [account] = useAccount({ web3 });
+  const [contract, contractState] = useContract({ web3 });
   const [blockData] = useBlockData(web3);
-  const [account, balance, connectWallet] = useWallet({ web3, blockData });
+  const [balance] = useBalance({ account, web3, blockData });
 
   const navigate = useNavigate();
 
