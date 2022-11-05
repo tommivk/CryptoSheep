@@ -73,8 +73,12 @@ const useWeb3 = () => {
 
   const checkDisconnect = async (accounts: Array<String>) => {
     if (!accounts || accounts.length === 0) {
-      setWeb3(new Web3(new Web3.providers.HttpProvider(INFURA_API_KEY)));
-      setWrongNetworkError(false);
+      try {
+        setWeb3(new Web3(new Web3.providers.HttpProvider(INFURA_API_KEY)));
+        setWrongNetworkError(false);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
