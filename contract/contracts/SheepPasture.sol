@@ -35,6 +35,10 @@ contract SheepPasture is SheepSVG {
         return sheepColors;
     }
 
+    function totalSheepCount() public view returns (uint) {
+        return sheeps.length;
+    }
+
     event NewSheep(address indexed _owner, uint32 _sheepId, string _name);
 
     function buySheep(string memory _name, string memory _color)
