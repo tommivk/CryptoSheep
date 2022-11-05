@@ -1,11 +1,13 @@
 export type Sheep = {
   id: string;
   name: string;
+  owner: string;
   level: string;
   lastFeedTime: string;
   concecutiveFeedingDays: string;
   isAlive: boolean;
   svg: string;
+  color: string;
 };
 
 export type BlockData = {

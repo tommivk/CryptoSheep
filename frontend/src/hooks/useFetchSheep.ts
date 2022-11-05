@@ -9,15 +9,14 @@ type Props = {
 };
 
 const useFetchSheep = ({ id, contract, blockData }: Props) => {
-  const [sheepData, setSheepData] = useState<Sheep & { owner: string }>();
+  const [sheepData, setSheepData] = useState<Sheep>();
   const [error, setError] = useState(false);
 
   const getSheepData = useCallback(
     async (id: string) => {
       try {
         const sheep = await contract?.methods.getSheep(id).call();
-        const owner = await contract.methods.sheepToOwner(sheep.id).call();
-        setSheepData({ ...sheep, owner });
+        setSheepData(sheep);
         setError(false);
       } catch (error) {
         setError(true);
