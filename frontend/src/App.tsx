@@ -50,10 +50,17 @@ const App = () => {
   }, [account, contract]);
 
   const getSheeps = useCallback(async () => {
-    if (!contract || !account) return;
-    const result = await contract.methods
+    if (!contract) return;
+
+    const sheepIds = await contract.methods
       .getOwnedSheeps()
       .call({ from: account });
+
+    const result = (await Promise.all(
+      sheepIds.map((id: string) => {
+        return contract.methods.getSheep(id).call();
+      })
+    )) as Array<Sheep>;
     setOwnedSheeps(result);
   }, [account, contract]);
 
