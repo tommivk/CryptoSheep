@@ -80,23 +80,16 @@ const App = () => {
     setNotification({ message: message, type });
   };
 
-  if (wrongNetworkError) {
-    return (
-      <div className="min-h-[100vh] bg-lightBackground dark:bg-darkBackground dark:text-slate-200">
-        <Navigation
-          account={account}
-          balance={balance}
-          connectWallet={connectWallet}
-          handleNotification={handleNotification}
-        />
-        <ErrorPage text="Please switch to Goerli network" />
-      </div>
-    );
-  }
   if (!blockData || !contract || !contractState) return <div>Loading</div>;
 
   return (
     <div className="min-h-[100vh] bg-lightBackground dark:bg-darkBackground dark:text-slate-200">
+      {wrongNetworkError && (
+        <div className="absolute w-full h-[100vh] bg-red-200 z-[1000] bg-[#000000a1] flex justify-center items-center">
+          <p className="text-2xl">Please switch to Goerli network</p>
+        </div>
+      )}
+
       <FontAwesomeIcon
         onClick={toggleDarkMode}
         icon={darkMode ? faSun : faMoon}
