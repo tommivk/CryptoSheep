@@ -8,6 +8,7 @@ import {
   faSquareArrowUpRight,
   faArrowDown,
   faArrowUp,
+  faBars,
 } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
@@ -34,23 +35,24 @@ const Navigation = ({
 
   return (
     <nav className="max-w-full py-3 px-8 h-navbarHeight z-40 relative">
-      <ul className="flex items-center flex-wrap gap-2 ">
+      <ul className="flex items-center flex-wrap gap-2">
         <Link
           to="/"
-          className="text-2xl font-semibold tracking-tight min-w-[220px]"
+          className="text-2xl font-semibold tracking-tight w-fit lg:min-w-[220px]"
         >
           CryptoSheeps
         </Link>
-        <li className="ml-auto mr-20 font-medium">
+
+        <li className="hidden lg:inline-block ml-auto mr-20 font-medium">
           <Link to="/">Mint</Link>
         </li>
-        <li className="mr-20 font-medium">
+        <li className="hidden lg:inline-block mr-20 font-medium">
           <Link to="/search">Search</Link>
         </li>
-        <li className="mr-auto font-medium">
+        <li className="hidden lg:inline-block mr-auto font-medium">
           <Link to="/sheep">My sheeps</Link>
         </li>
-        <li className="min-w-[220px]">
+        <li className="hidden lg:inline-block min-w-[220px]">
           <Menu>
             {({ open }) => (
               <>
@@ -120,6 +122,76 @@ const Navigation = ({
                 </Transition>
               </>
             )}
+          </Menu>
+        </li>
+        <li className="inline-block lg:hidden ml-auto">
+          <Menu>
+            <Menu.Button>
+              <FontAwesomeIcon
+                icon={faBars}
+                className="text-2xl hover:text-gray-400"
+              />
+            </Menu.Button>
+            <Menu.Items>
+              <Menu.Item>
+                <div className="text-slate-200 flex flex-col absolute bg-gray-800 right-5 ml-5 top-[50px] text-left text-xl px-10 rounded-md">
+                  <div className="m-auto flex flex-col gap-5 pt-10">
+                    <Menu.Item
+                      as={Link}
+                      to="/"
+                      className="hover:text-gray-500 "
+                    >
+                      Home
+                    </Menu.Item>
+                    <Menu.Item
+                      as={Link}
+                      to="/search"
+                      className="hover:text-gray-500 "
+                    >
+                      Search
+                    </Menu.Item>
+                    <Menu.Item
+                      as={Link}
+                      to="/sheep"
+                      className="hover:text-gray-500 "
+                    >
+                      My sheeps
+                    </Menu.Item>
+                  </div>
+
+                  {account ? (
+                    <Menu.Item
+                      as="div"
+                      className="mt-8 border-2 px-5 py-2 rounded-md mb-5"
+                    >
+                      <div
+                        className="text-sm cursor-pointer hover:text-gray-400 text-gray-300 break-all"
+                        onClick={copyAddress}
+                      >
+                        {account?.substring(0, 9)}
+                        {"..."}
+                        {account?.substring(account?.length - 7)}
+                        <FontAwesomeIcon
+                          icon={faCopy}
+                          className="text-sm pl-2"
+                        ></FontAwesomeIcon>
+                      </div>
+                      <div className="text-sm text-gray-300 mt-2">
+                        Balance: {balance?.substring(0, 9)} ETH
+                      </div>
+                    </Menu.Item>
+                  ) : (
+                    <Menu.Item
+                      as="div"
+                      className="mt-8 border-2 px-5 py-2 rounded-md mb-5 cursor-pointer hover:text-gray-500 hover:border-gray-500"
+                      onClick={connectWallet}
+                    >
+                      <p className="text-sm">Connect wallet</p>
+                    </Menu.Item>
+                  )}
+                </div>
+              </Menu.Item>
+            </Menu.Items>
           </Menu>
         </li>
       </ul>
