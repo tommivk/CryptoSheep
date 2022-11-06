@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "./Button";
 import { Contract } from "web3-eth-contract";
 import { BlockData, ContractState } from "../types";
@@ -14,9 +14,18 @@ type Props = {
 
 const SheepSearch = ({ contract, account, blockData }: Props) => {
   const [search, setSearch] = useState("");
+  const [totalSheepCount, setTotalSheepCount] = useState<number>();
+
   const [sheep, error] = useFetchSheep({ id: search, blockData, contract });
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    contract.methods
+      .totalSheepCount()
+      .call()
+      .then((result: string) => setTotalSheepCount(Number(result)));
+  }, [blockData.blockNumber]);
 
   const handleSearch = () => {
     if (!inputRef.current) return;
@@ -25,7 +34,16 @@ const SheepSearch = ({ contract, account, blockData }: Props) => {
 
   return (
     <div className="pb-20">
-      <h1 className="text-2xl text-center mt-10 mb-10">Search sheeps by ID</h1>
+      <h1 className="text-2xl text-center mt-10 mb-10">
+        Search sheeps by ID{" "}
+        {totalSheepCount && (
+          <span className="text-gray-400 text-lg">
+            {"(0 - "}
+            {totalSheepCount - 1}
+            {")"}
+          </span>
+        )}
+      </h1>
       <div className="mb-10 flex justify-center mx-5">
         <input
           type="number"
