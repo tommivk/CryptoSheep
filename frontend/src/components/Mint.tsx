@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Button from "./Button";
-import graySheep from "../images/graySheep.svg";
+import graySheep from "/graySheep.svg";
 import { ContractState, NotificationMessage } from "../types";
 import { Contract } from "web3-eth-contract";
 import NewSheepModal from "./NewSheepModal";

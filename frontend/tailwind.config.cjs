@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        sheepBG:  "url('src/images/sheep.jpg')"
+        sheepBG:  "url('/sheep.jpg')"
       },
       spacing: {
         navbarHeight: '60px',
