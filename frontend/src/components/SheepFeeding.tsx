@@ -52,12 +52,14 @@ const SheepFeeding = ({
     Number(sheep?.lastFeedTime) + feedingLockDuration - blockData.blockTime
   );
 
+  const feedingDisabled = feedingUnlock > 0 && Number(sheep.timesFed) > 0;
+
   return (
     <>
       {account === sheep.owner && sheep.isAlive && (
         <div className="px-2 m-auto flex flex-col pb-5">
           <>
-            {feedingUnlock > 0 ? (
+            {feedingDisabled ? (
               <p className="m-auto">
                 Feeding available in: ~ {feedingAvailableIn}
               </p>
@@ -67,13 +69,13 @@ const SheepFeeding = ({
             <Button
               className="mt-4 block w-fit m-auto"
               onClick={() => feed(sheep.id)}
-              disabled={feedingUnlock > 0}
+              disabled={feedingDisabled}
             >
               {loading ? (
                 <FontAwesomeIcon icon={faSpinner} spin />
               ) : (
                 <>
-                  {feedingUnlock > 0 && <span className="grayscale">🔒</span>}{" "}
+                  {feedingDisabled && <span className="grayscale">🔒</span>}{" "}
                   Feed
                 </>
               )}
