@@ -87,10 +87,10 @@ contract SheepPasture is SheepSVG {
         sheep.lastFeedTime = uint64(block.timestamp);
         sheep.timesFed++;
 
-        if (sheep.concecutiveFeedingDays == 7) {
+        if (sheep.timesFed % 3 == 0) {
             sheep.level++;
-            sheep.concecutiveFeedingDays = 0;
         }
+
         return true;
     }
 
