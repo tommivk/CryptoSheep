@@ -208,6 +208,45 @@ describe("Sheep tests", () => {
     expect(sheepsB.length).to.equal(1);
     expect(sheepsB[0]).to.equal("2");
   });
+
+  it("getSheep should return correct data", async () => {
+    const [accountA, accountB] = await ethers.getSigners();
+
+    const txOne = await (
+      await sheeps.mint("sheep", sheepColors[1], {
+        value: sheepCost,
+      })
+    ).wait();
+
+    const txTwo = await (
+      await sheeps.connect(accountB).mint("sheep2", sheepColors[2], {
+        value: sheepCost,
+      })
+    ).wait();
+
+    const blockOne = await ethers.provider.getBlock(txOne.blockNumber);
+    const blockTwo = await ethers.provider.getBlock(txTwo.blockNumber);
+
+    const sheepOne = await sheeps.getSheep(0);
+    expect(sheepOne.owner).to.equal(accountA.address);
+    expect(sheepOne.id).to.equal(0);
+    expect(sheepOne.name).to.equal("sheep");
+    expect(sheepOne.color).to.equal(sheepColors[1]);
+    expect(sheepOne.level).to.equal(1);
+    expect(sheepOne.lastFeedTime.toNumber()).to.equal(blockOne.timestamp);
+    expect(sheepOne.timesFed).to.equal(0);
+    expect(sheepOne.isAlive).to.equal(true);
+
+    const sheepTwo = await sheeps.getSheep(1);
+    expect(sheepTwo.owner).to.equal(accountB.address);
+    expect(sheepTwo.id).to.equal(1);
+    expect(sheepTwo.name).to.equal("sheep2");
+    expect(sheepTwo.color).to.equal(sheepColors[2]);
+    expect(sheepTwo.level).to.equal(1);
+    expect(sheepTwo.lastFeedTime.toNumber()).to.equal(blockTwo.timestamp);
+    expect(sheepTwo.timesFed).to.equal(0);
+    expect(sheepTwo.isAlive).to.equal(true);
+  });
 });
 
 const increaseTime = async (seconds: number) => {
