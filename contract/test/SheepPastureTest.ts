@@ -141,6 +141,32 @@ describe("Sheep tests", () => {
     expect(sheep.timesFed).to.equal(3);
   });
 
+  it("Sheep level should increase after every 3 feeding", async () => {
+    const oneDay = 1 * 24 * 60 * 60;
+    await sheeps.mint("mySheep", sheepColors[0], { value: sheepCost });
+    await sheeps.feed(0);
+    await increaseTime(oneDay);
+
+    await sheeps.feed(0);
+    let sheep = await sheeps.sheeps(0);
+    expect(sheep.level).to.equal(1);
+
+    await increaseTime(oneDay);
+
+    await sheeps.feed(0);
+    sheep = await sheeps.sheeps(0);
+    expect(sheep.level).to.equal(2);
+
+    await increaseTime(oneDay);
+    await sheeps.feed(0);
+    await increaseTime(oneDay);
+    await sheeps.feed(0);
+    await increaseTime(oneDay);
+    await sheeps.feed(0);
+    sheep = await sheeps.sheeps(0);
+    expect(sheep.level).to.equal(3);
+  });
+
   it("Sheep should die if it has not been feeded in 3 days", async () => {
     const threeDays = 3 * 24 * 60 * 60;
 
