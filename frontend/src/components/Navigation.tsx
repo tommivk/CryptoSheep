@@ -40,7 +40,7 @@ const Navigation = ({
   };
 
   return (
-    <nav className="max-w-full py-3 px-8 h-navbarHeight z-40 relative">
+    <nav className="max-w-full py-3 px-3 sm:px-8 h-navbarHeight z-40 relative">
       <ul className="flex items-center flex-wrap gap-2">
         <Link
           to="/"
@@ -147,7 +147,7 @@ const Navigation = ({
             </Menu.Button>
             <Menu.Items>
               <Menu.Item>
-                <div className="text-slate-200 flex flex-col absolute bg-gray-800 right-5 ml-5 top-[50px] text-left text-xl px-10 rounded-md">
+                <div className="text-slate-200 flex flex-col absolute bg-gray-800 right-5 ml-5 top-[50px] text-left text-xl px-7 rounded-md">
                   <div className="m-auto flex flex-col gap-5 pt-10">
                     <Menu.Item
                       as={Link}

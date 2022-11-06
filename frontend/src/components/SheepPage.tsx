@@ -29,17 +29,19 @@ const SheepPage = ({
   if (!sheep) return <></>;
 
   return (
-    <Card className="mt-20">
-      <SheepDetails sheep={sheep} account={account} />
-      <SheepFeeding
-        handleNotification={handleNotification}
-        account={account}
-        sheep={sheep}
-        blockData={blockData}
-        contract={contract}
-        contractState={contractState}
-      />
-    </Card>
+    <div className="pb-20">
+      <Card className="mt-20">
+        <SheepDetails sheep={sheep} account={account} />
+        <SheepFeeding
+          handleNotification={handleNotification}
+          account={account}
+          sheep={sheep}
+          blockData={blockData}
+          contract={contract}
+          contractState={contractState}
+        />
+      </Card>
+    </div>
   );
 };
 

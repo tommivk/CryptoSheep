@@ -24,14 +24,14 @@ const SheepSearch = ({ contract, account, blockData }: Props) => {
   };
 
   return (
-    <div>
+    <div className="pb-20">
       <h1 className="text-2xl text-center mt-10 mb-10">Search sheeps by ID</h1>
-      <div className="m-auto w-fit mb-10">
+      <div className="mb-10 flex justify-center mx-5">
         <input
           type="number"
           min={0}
           ref={inputRef}
-          className="m-auto text-slate-500 px-5 py-2 mr-2 rounded-md border-2 border-lightBorder"
+          className="text-slate-500 min-w-[80px] px-5 py-2 mr-2 rounded-md border-2 border-lightBorder"
           placeholder="Sheep ID"
         ></input>
         <Button onClick={handleSearch}>Search</Button>
