@@ -60,14 +60,14 @@ const Mint = ({
         ></img>
         <img
           onMouseOver={() => setIsHovered({ ...isHovered, sheep2: true })}
-          className={`mt-5 hidden md:block absolute h-60 right-[5vw] bottom-[0vh] ${
+          className={`mt-5 absolute h-60 right-[5vw] bottom-[0vh] ${
             isHovered.sheep2 ? "animate-jump" : "animate-moveLeft"
           }`}
           src={graySheep}
         ></img>
         <img
           onMouseOver={() => setIsHovered({ ...isHovered, sheep3: true })}
-          className={`mt-5 absolute h-60 bottom-[3vh] left-[10vw] ${
+          className={`mt-5 hidden md:block absolute h-60 bottom-[3vh] left-[10vw] ${
             isHovered.sheep3 ? "animate-jump" : ""
           }`}
           src={graySheep}
