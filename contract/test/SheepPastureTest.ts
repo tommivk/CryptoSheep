@@ -120,6 +120,27 @@ describe("Sheep tests", () => {
     expect(sheep.lastFeedTime).to.equal(block.timestamp);
   });
 
+  it("Feeding should not be possible without waiting 1 day between feedings", async () => {
+    const oneDay = 1 * 24 * 60 * 60;
+    await sheeps.mint("mySheep", sheepColors[0], { value: sheepCost });
+    await sheeps.feed(0);
+
+    await expect(sheeps.feed(0)).to.revertedWithoutReason();
+
+    await ethers.provider.send("evm_increaseTime", [oneDay]);
+    await sheeps.feed(0);
+    let sheep = await sheeps.sheeps(0);
+    expect(sheep.timesFed).to.equal(2);
+
+    await expect(sheeps.feed(0)).to.revertedWithoutReason();
+    await ethers.provider.send("evm_increaseTime", [oneDay - 30]);
+    await expect(sheeps.feed(0)).to.revertedWithoutReason();
+    await ethers.provider.send("evm_increaseTime", [30]);
+    await sheeps.feed(0);
+    sheep = await sheeps.sheeps(0);
+    expect(sheep.timesFed).to.equal(3);
+  });
+
   it("Sheep should die if it has not been feeded in 3 days", async () => {
     const threeDays = 3 * 24 * 60 * 60;
 
