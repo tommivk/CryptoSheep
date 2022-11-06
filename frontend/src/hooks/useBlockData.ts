@@ -4,14 +4,21 @@ import { BlockData } from "../types";
 
 const useBlockData = (web3: Web3 | undefined) => {
   const [blockData, setBlockData] = useState<BlockData>();
+  const [error, setError] = useState(false);
 
   const getBlockData = useCallback(async () => {
-    const blockNumber = await web3!.eth.getBlockNumber();
-    const block = await web3!.eth.getBlock(blockNumber);
-    setBlockData({
-      blockNumber,
-      blockTime: Number(block.timestamp),
-    });
+    if (!web3) return;
+    try {
+      const blockNumber = await web3.eth.getBlockNumber();
+      const block = await web3.eth.getBlock(blockNumber);
+      setBlockData({
+        blockNumber,
+        blockTime: Number(block.timestamp),
+      });
+    } catch (error) {
+      console.error(error);
+      setError(true);
+    }
   }, [web3]);
 
   useEffect(() => {
@@ -31,7 +38,7 @@ const useBlockData = (web3: Web3 | undefined) => {
     };
   }, [web3, getBlockData]);
 
-  return [blockData] as const;
+  return [blockData, error] as const;
 };
 
 export default useBlockData;

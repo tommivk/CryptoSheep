@@ -5,6 +5,8 @@ import useFetchSheep from "../hooks/useFetchSheep";
 import SheepDetails from "./SheepDetails";
 import SheepFeeding from "./SheepFeeding";
 import Card from "./Card";
+import Loading from "./Loading";
+import ErrorPage from "./ErrorPage";
 
 type Props = {
   contract: Contract;
@@ -25,8 +27,8 @@ const SheepPage = ({
 
   const [sheep, error] = useFetchSheep({ id, blockData, contract });
 
-  if (error) return <div>Error</div>;
-  if (!sheep) return <></>;
+  if (error) return <ErrorPage code={500} text="Internal server error" />;
+  if (!sheep) return <Loading />;
 
   return (
     <div className="pb-20">

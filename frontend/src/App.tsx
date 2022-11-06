@@ -16,9 +16,11 @@ import { faSun, faMoon } from "@fortawesome/free-regular-svg-icons";
 import Notification from "./components/Notification";
 import SheepSearch from "./components/SheepSearch";
 import ErrorPage from "./components/ErrorPage";
+import Loading from "./components/Loading";
 
 const App = () => {
-  const [ownedSheeps, setOwnedSheeps] = useState<Array<Sheep>>([]);
+  const [ownedSheeps, setOwnedSheeps] = useState<Array<Sheep>>();
+  const [sheepFetchError, setSheepFetchError] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
   const [notification, setNotification] = useState<
     NotificationMessage | undefined
@@ -38,12 +40,12 @@ const App = () => {
     setNotification({ message: message, type });
   };
 
-  const [web3, wrongNetworkError, connectWallet] = useWeb3({
+  const [web3, wrongNetworkError, connectWallet, web3Error] = useWeb3({
     handleNotification,
   });
-  const [account] = useAccount({ web3 });
-  const [contract, contractState] = useContract({ web3 });
-  const [blockData] = useBlockData(web3);
+  const [account, accountError] = useAccount({ web3 });
+  const [contract, contractState, contractError] = useContract({ web3 });
+  const [blockData, blockDataError] = useBlockData(web3);
   const [balance] = useBalance({ account, web3, blockData });
 
   const navigate = useNavigate();
@@ -67,17 +69,27 @@ const App = () => {
 
   const getSheeps = useCallback(async () => {
     if (!contract) return;
+    if (!account) {
+      return setOwnedSheeps(undefined);
+    }
+    try {
+      const sheepIds = await contract.methods
+        .getOwnedSheeps()
+        .call({ from: account });
 
-    const sheepIds = await contract.methods
-      .getOwnedSheeps()
-      .call({ from: account });
+      const result =
+        ((await Promise.all(
+          sheepIds.map((id: string) => {
+            return contract.methods.getSheep(id).call();
+          })
+        )) as Array<Sheep>) ?? [];
 
-    const result = (await Promise.all(
-      sheepIds.map((id: string) => {
-        return contract.methods.getSheep(id).call();
-      })
-    )) as Array<Sheep>;
-    setOwnedSheeps(result);
+      setOwnedSheeps(result);
+      setSheepFetchError(false);
+    } catch (error) {
+      console.error(error);
+      setSheepFetchError(true);
+    }
   }, [account, contract]);
 
   useEffect(() => {
@@ -89,7 +101,43 @@ const App = () => {
     setDarkMode((prev) => !prev);
   };
 
-  if (!blockData || !contract || !contractState) return <div>Loading</div>;
+  const error =
+    sheepFetchError ||
+    web3Error ||
+    accountError ||
+    blockDataError ||
+    contractError;
+
+  if (error) {
+    return (
+      <div className="min-h-[100vh] bg-lightBackground dark:bg-darkBackground dark:text-slate-200">
+        <Navigation
+          account={account}
+          balance={balance}
+          connectWallet={connectWallet}
+          handleNotification={handleNotification}
+          darkMode={darkMode}
+          toggleDarkMode={toggleDarkMode}
+        />
+        <ErrorPage code={500} text="Internal server error" />
+      </div>
+    );
+  }
+
+  if (!blockData || !contract || !contractState)
+    return (
+      <div className="min-h-[100vh] bg-lightBackground dark:bg-darkBackground dark:text-slate-200">
+        <Navigation
+          account={account}
+          balance={balance}
+          connectWallet={connectWallet}
+          handleNotification={handleNotification}
+          darkMode={darkMode}
+          toggleDarkMode={toggleDarkMode}
+        />
+        <Loading />
+      </div>
+    );
 
   return (
     <div className="min-h-[100vh] bg-lightBackground dark:bg-darkBackground dark:text-slate-200">

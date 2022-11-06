@@ -14,6 +14,7 @@ type Props = {
 const useContract = ({ web3 }: Props) => {
   const [contract, setContract] = useState<Contract>();
   const [contractState, setContractState] = useState<ContractState>();
+  const [error, setError] = useState(false);
 
   const getContractState = async (contract: Contract) => {
     try {
@@ -29,6 +30,7 @@ const useContract = ({ web3 }: Props) => {
         feedingLockDuration: Number(feedingLockDuration),
       });
     } catch (error) {
+      setError(true);
       console.error(error);
     }
   };
@@ -44,7 +46,7 @@ const useContract = ({ web3 }: Props) => {
     }
   }, [web3]);
 
-  return [contract, contractState] as const;
+  return [contract, contractState, error] as const;
 };
 
 export default useContract;

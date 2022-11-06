@@ -11,6 +11,7 @@ type Props = {
 
 const useWeb3 = ({ handleNotification }: Props) => {
   const [web3, setWeb3] = useState<Web3>();
+  const [error, setError] = useState(false);
   const [wrongNetworkError, setWrongNetworkError] = useState<boolean>(false);
 
   const isCorrectNetwork = async (web3: Web3) => {
@@ -76,6 +77,7 @@ const useWeb3 = ({ handleNotification }: Props) => {
       setWrongNetworkError(false);
       setWeb3(web3);
     } catch (error) {
+      setError(true);
       console.error(error);
     }
   }, []);
@@ -86,6 +88,7 @@ const useWeb3 = ({ handleNotification }: Props) => {
         setWeb3(new Web3(new Web3.providers.HttpProvider(INFURA_API_KEY)));
         setWrongNetworkError(false);
       } catch (error) {
+        setError(true);
         console.error(error);
       }
     }
@@ -103,7 +106,7 @@ const useWeb3 = ({ handleNotification }: Props) => {
     };
   }, [initialize]);
 
-  return [web3, wrongNetworkError, connectWallet] as const;
+  return [web3, wrongNetworkError, connectWallet, error] as const;
 };
 
 export default useWeb3;

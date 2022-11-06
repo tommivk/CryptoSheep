@@ -7,6 +7,7 @@ type Props = {
 
 const useAccount = ({ web3 }: Props) => {
   const [account, setAccount] = useState<string>();
+  const [error, setError] = useState(false);
 
   const loadAccount = async () => {
     if (!web3) return;
@@ -15,14 +16,20 @@ const useAccount = ({ web3 }: Props) => {
       setAccount(account);
     } catch (error) {
       console.error(error);
+      setError(true);
       setAccount(undefined);
     }
   };
 
   const handleAccountChange = (accounts: Array<string>) => {
     if (!web3) return;
-    const [account] = accounts;
-    setAccount(web3.utils.toChecksumAddress(account));
+    try {
+      const [account] = accounts;
+      setAccount(web3.utils.toChecksumAddress(account));
+    } catch (error) {
+      console.error(error);
+      setError(true);
+    }
   };
 
   useEffect(() => {
@@ -32,7 +39,7 @@ const useAccount = ({ web3 }: Props) => {
       window?.ethereum?.removeListener("accountsChanged", handleAccountChange);
   }, [web3]);
 
-  return [account] as const;
+  return [account, error] as const;
 };
 
 export default useAccount;
