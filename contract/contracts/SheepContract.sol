@@ -148,7 +148,7 @@ contract SheepContract is SheepPasture, ERC721, ERC721Metadata {
                                     '{"name": "',
                                     title,
                                     '", "description": "',
-                                    "Sheep NFT",
+                                    "Your dynamic sheep friend",
                                     '",'
                                     '"image_data": "',
                                     bytes(svgData),
