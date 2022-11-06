@@ -96,7 +96,7 @@ const Navigation = ({
                           <FontAwesomeIcon
                             onClick={copyAddress}
                             icon={faCopy}
-                            className="text-2xl pl-4 cursor-pointer hover:text-gray-400"
+                            className="text-xl pl-4 cursor-pointer hover:text-gray-400"
                           ></FontAwesomeIcon>
                           <a
                             className="flex pl-3"
@@ -106,7 +106,7 @@ const Navigation = ({
                           >
                             <FontAwesomeIcon
                               icon={faSquareArrowUpRight}
-                              className="text-2xl  cursor-pointer hover:text-gray-400"
+                              className="text-xl  cursor-pointer hover:text-gray-400"
                             />
                           </a>
                         </div>
