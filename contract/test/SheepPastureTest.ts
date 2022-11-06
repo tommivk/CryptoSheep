@@ -127,15 +127,15 @@ describe("Sheep tests", () => {
 
     await expect(sheeps.feed(0)).to.revertedWithoutReason();
 
-    await ethers.provider.send("evm_increaseTime", [oneDay]);
+    await increaseTime(oneDay);
     await sheeps.feed(0);
     let sheep = await sheeps.sheeps(0);
     expect(sheep.timesFed).to.equal(2);
 
     await expect(sheeps.feed(0)).to.revertedWithoutReason();
-    await ethers.provider.send("evm_increaseTime", [oneDay - 30]);
+    await increaseTime(oneDay - 30);
     await expect(sheeps.feed(0)).to.revertedWithoutReason();
-    await ethers.provider.send("evm_increaseTime", [30]);
+    await increaseTime(30);
     await sheeps.feed(0);
     sheep = await sheeps.sheeps(0);
     expect(sheep.timesFed).to.equal(3);
@@ -146,8 +146,7 @@ describe("Sheep tests", () => {
 
     await sheeps.mint("mySheep", sheepColors[0], { value: sheepCost });
 
-    await ethers.provider.send("evm_increaseTime", [threeDays]);
-    await ethers.provider.send("evm_mine", []);
+    await increaseTime(threeDays);
     await expect(sheeps.feed(0)).to.revertedWith("Your sheep is dead :(");
   });
 
@@ -157,8 +156,7 @@ describe("Sheep tests", () => {
     await sheeps.mint("mySheep", sheepColors[0], { value: sheepCost });
 
     const oneDay = 1 * 24 * 60 * 60;
-    await ethers.provider.send("evm_increaseTime", [oneDay]);
-    await ethers.provider.send("evm_mine", []);
+    await increaseTime(oneDay);
 
     await expect(
       sheeps.connect(accountB).feed(0)
@@ -185,3 +183,8 @@ describe("Sheep tests", () => {
     expect(sheepsB[0]).to.equal("2");
   });
 });
+
+const increaseTime = async (seconds: number) => {
+  await ethers.provider.send("evm_increaseTime", [seconds]);
+  await ethers.provider.send("evm_mine", []);
+};
