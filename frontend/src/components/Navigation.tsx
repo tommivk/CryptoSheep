@@ -9,6 +9,8 @@ import {
   faArrowDown,
   faArrowUp,
   faBars,
+  faMoon,
+  faSun,
 } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
@@ -16,6 +18,8 @@ type Props = {
   balance: string | undefined;
   connectWallet: () => Promise<void>;
   handleNotification: (params: NotificationMessage) => void;
+  darkMode: boolean;
+  toggleDarkMode: () => void;
 };
 
 const Navigation = ({
@@ -23,6 +27,8 @@ const Navigation = ({
   balance,
   connectWallet,
   handleNotification,
+  darkMode,
+  toggleDarkMode,
 }: Props) => {
   const copyAddress = () => {
     try {
@@ -124,7 +130,14 @@ const Navigation = ({
             )}
           </Menu>
         </li>
-        <li className="inline-block lg:hidden ml-auto">
+        <li className="block lg:hidden ml-auto">
+          <FontAwesomeIcon
+            onClick={toggleDarkMode}
+            icon={darkMode ? faSun : faMoon}
+            className=" hover:text-gray-400 cursor-pointer text-xl"
+          />
+        </li>
+        <li className="ml-2 sm:ml-5 inline-block lg:hidden">
           <Menu>
             <Menu.Button>
               <FontAwesomeIcon

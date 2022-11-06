@@ -110,6 +110,8 @@ const App = () => {
         balance={balance}
         connectWallet={connectWallet}
         handleNotification={handleNotification}
+        darkMode={darkMode}
+        toggleDarkMode={toggleDarkMode}
       />
       <Routes>
         <Route
