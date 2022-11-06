@@ -1,10 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import Web3 from "web3";
+import { NotificationMessage } from "../types";
 
 const INFURA_API_KEY = import.meta.env.VITE_INFURA_API_KEY;
 const GOERLI_NETWORK_ID = 5;
 
-const useWeb3 = () => {
+type Props = {
+  handleNotification: ({ message, type }: NotificationMessage) => void;
+};
+
+const useWeb3 = ({ handleNotification }: Props) => {
   const [web3, setWeb3] = useState<Web3>();
   const [wrongNetworkError, setWrongNetworkError] = useState<boolean>(false);
 
@@ -40,6 +45,10 @@ const useWeb3 = () => {
         console.error(error);
       }
     } else {
+      handleNotification({
+        message: "No Ethereum compatible wallet found",
+        type: "error",
+      });
       console.error("No compatible wallet found");
     }
   };

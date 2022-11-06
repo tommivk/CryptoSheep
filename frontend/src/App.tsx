@@ -24,7 +24,23 @@ const App = () => {
     NotificationMessage | undefined
   >();
 
-  const [web3, wrongNetworkError, connectWallet] = useWeb3();
+  const notificationRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleNotification = ({ message, type }: NotificationMessage) => {
+    if (notificationRef.current) {
+      clearTimeout(notificationRef.current);
+    }
+    const timeout = setTimeout(() => {
+      setNotification(undefined);
+    }, 7000);
+
+    notificationRef.current = timeout;
+    setNotification({ message: message, type });
+  };
+
+  const [web3, wrongNetworkError, connectWallet] = useWeb3({
+    handleNotification,
+  });
   const [account] = useAccount({ web3 });
   const [contract, contractState] = useContract({ web3 });
   const [blockData] = useBlockData(web3);
@@ -71,20 +87,6 @@ const App = () => {
   const toggleDarkMode = () => {
     document.body.classList.toggle("dark", !darkMode);
     setDarkMode((prev) => !prev);
-  };
-
-  const notificationRef = useRef<NodeJS.Timeout | null>(null);
-
-  const handleNotification = ({ message, type }: NotificationMessage) => {
-    if (notificationRef.current) {
-      clearTimeout(notificationRef.current);
-    }
-    const timeout = setTimeout(() => {
-      setNotification(undefined);
-    }, 7000);
-
-    notificationRef.current = timeout;
-    setNotification({ message: message, type });
   };
 
   if (!blockData || !contract || !contractState) return <div>Loading</div>;
