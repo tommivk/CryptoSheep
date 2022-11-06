@@ -71,11 +71,7 @@ contract SheepPasture is SheepSVG {
         _;
     }
 
-    function feed(uint _sheepId)
-        public
-        onlySheepOwner(_sheepId)
-        returns (bool)
-    {
+    function feed(uint _sheepId) public onlySheepOwner(_sheepId) {
         Sheep storage sheep = sheeps[_sheepId];
 
         require((block.timestamp - sheep.lastFeedTime) > feedingUnlock);
@@ -90,8 +86,6 @@ contract SheepPasture is SheepSVG {
         if (sheep.timesFed % 3 == 0) {
             sheep.level++;
         }
-
-        return true;
     }
 
     function getSheepSVG(uint _sheepId) public view returns (string memory) {
