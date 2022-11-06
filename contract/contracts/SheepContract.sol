@@ -171,7 +171,7 @@ contract SheepContract is SheepPasture, ERC721, ERC721Metadata {
                                     '{"trait_type": "Level", "value": ',
                                     Strings.toString(sheep.level),
                                     "},",
-                                    '{"display_type": "date", "trait_type": "Last feeded", "value": ',
+                                    '{"display_type": "date", "trait_type": "Last fed", "value": ',
                                     Strings.toString(
                                         uint256(sheep.lastFeedTime)
                                     ),
