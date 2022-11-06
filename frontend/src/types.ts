@@ -4,7 +4,7 @@ export type Sheep = {
   owner: string;
   level: string;
   lastFeedTime: string;
-  concecutiveFeedingDays: string;
+  timesFed: string;
   isAlive: boolean;
   svg: string;
   color: string;
