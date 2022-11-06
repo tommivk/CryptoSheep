@@ -51,7 +51,7 @@ describe("Sheep tests", () => {
 
     expect(sheep.name).to.equal("mySheep");
     expect(sheep.color).to.equal(sheepColors[0]);
-    expect(sheep.concecutiveFeedingDays).to.equal(0);
+    expect(sheep.timesFed).to.equal(0);
     expect(sheep.level).to.equal(1);
     expect(sheep.lastFeedTime).to.not.equal(0);
     expect(sheep.lastFeedTime).to.equal(block.timestamp);
@@ -108,19 +108,12 @@ describe("Sheep tests", () => {
     ).to.be.revertedWith("Maximum name size is 50 bytes");
   });
 
-  it("Feeding sheep should only be possible after 1 day", async () => {
-    const oneDay = 1 * 24 * 60 * 60;
-
+  it("Feeding sheep should be possible after minting sheep without waiting", async () => {
     await sheeps.mint("mySheep", sheepColors[0], { value: sheepCost });
 
-    await expect(sheeps.feed(0)).to.revertedWithoutReason();
-
-    await ethers.provider.send("evm_increaseTime", [oneDay]);
-    await ethers.provider.send("evm_mine", []);
     await sheeps.feed(0);
-
     const sheep = await sheeps.sheeps(0);
-    expect(sheep.concecutiveFeedingDays).to.equal(1);
+    expect(sheep.timesFed).to.equal(1);
 
     const blockNumber = await ethers.provider.getBlockNumber();
     const block = await ethers.provider.getBlock(blockNumber);
@@ -131,8 +124,6 @@ describe("Sheep tests", () => {
     const threeDays = 3 * 24 * 60 * 60;
 
     await sheeps.mint("mySheep", sheepColors[0], { value: sheepCost });
-
-    await expect(sheeps.feed(0)).to.revertedWithoutReason();
 
     await ethers.provider.send("evm_increaseTime", [threeDays]);
     await ethers.provider.send("evm_mine", []);
