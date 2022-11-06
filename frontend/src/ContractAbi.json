@@ -263,9 +263,9 @@
               "type": "uint64"
             },
             {
-              "internalType": "uint8",
-              "name": "concecutiveFeedingDays",
-              "type": "uint8"
+              "internalType": "uint32",
+              "name": "timesFed",
+              "type": "uint32"
             },
             {
               "internalType": "bool",
@@ -553,9 +553,9 @@
           "type": "uint64"
         },
         {
-          "internalType": "uint8",
-          "name": "concecutiveFeedingDays",
-          "type": "uint8"
+          "internalType": "uint32",
+          "name": "timesFed",
+          "type": "uint32"
         }
       ],
       "stateMutability": "view",
