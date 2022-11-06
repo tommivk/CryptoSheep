@@ -115,7 +115,7 @@ const NewSheepModal = ({
           type="text"
           value={sheepName}
           onChange={handleNameChange}
-          className="mb-5 p-2 rounded-lg mr-2 text-slate-800 border-2 border-slate-600 m-auto block disabled:bg-zinc-500"
+          className="mb-5 p-2 rounded-lg text-slate-800 border-2 border-slate-600 m-auto block disabled:bg-zinc-500"
         ></input>
 
         {account ? (
