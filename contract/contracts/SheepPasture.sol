@@ -74,7 +74,10 @@ contract SheepPasture is SheepSVG {
     function feed(uint _sheepId) public onlySheepOwner(_sheepId) {
         Sheep storage sheep = sheeps[_sheepId];
 
-        require((block.timestamp - sheep.lastFeedTime) > feedingUnlock);
+        require(
+            ((block.timestamp - sheep.lastFeedTime) > feedingUnlock) ||
+                sheep.timesFed == 0
+        );
         require(
             (block.timestamp - sheep.lastFeedTime) < feedingDeadline,
             "Your sheep is dead :("
