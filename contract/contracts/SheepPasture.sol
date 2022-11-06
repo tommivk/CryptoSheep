@@ -14,7 +14,7 @@ contract SheepPasture is SheepSVG {
         string color;
         uint16 level;
         uint64 lastFeedTime;
-        uint8 concecutiveFeedingDays;
+        uint32 timesFed;
     }
 
     Sheep[] public sheeps;
@@ -85,7 +85,7 @@ contract SheepPasture is SheepSVG {
         );
 
         sheep.lastFeedTime = uint64(block.timestamp);
-        sheep.concecutiveFeedingDays++;
+        sheep.timesFed++;
 
         if (sheep.concecutiveFeedingDays == 7) {
             sheep.level++;
@@ -137,7 +137,7 @@ contract SheepPasture is SheepSVG {
         string name;
         uint16 level;
         uint64 lastFeedTime;
-        uint8 concecutiveFeedingDays;
+        uint32 timesFed;
         bool isAlive;
         string svg;
         string color;
@@ -157,7 +157,7 @@ contract SheepPasture is SheepSVG {
         sheepData.color = sheep.color;
         sheepData.level = sheep.level;
         sheepData.lastFeedTime = sheep.lastFeedTime;
-        sheepData.concecutiveFeedingDays = sheep.concecutiveFeedingDays;
+        sheepData.timesFed = sheep.timesFed;
         sheepData.isAlive = checkIsAlive(sheep);
         sheepData.svg = getSheepSVG(_sheepId);
 
