@@ -46,7 +46,7 @@ const Navigation = ({
           to="/"
           className="text-2xl font-semibold tracking-tight w-fit lg:min-w-[220px]"
         >
-          CryptoSheeps
+          CryptoSheep
         </Link>
 
         <li className="hidden lg:inline-block ml-auto mr-20 font-medium">
@@ -56,7 +56,7 @@ const Navigation = ({
           <Link to="/search">Search</Link>
         </li>
         <li className="hidden lg:inline-block mr-auto font-medium">
-          <Link to="/sheep">My sheeps</Link>
+          <Link to="/sheep">My sheep</Link>
         </li>
         <li className="hidden lg:inline-block min-w-[220px]">
           <Menu>
@@ -168,7 +168,7 @@ const Navigation = ({
                       to="/sheep"
                       className="hover:text-gray-500 "
                     >
-                      My sheeps
+                      My sheep
                     </Menu.Item>
                   </div>
 

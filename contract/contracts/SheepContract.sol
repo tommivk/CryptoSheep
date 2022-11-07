@@ -121,7 +121,7 @@ contract SheepContract is SheepPasture, ERC721, ERC721Metadata {
     }
 
     function name() external pure returns (string memory _name) {
-        return "CryptoSheeps";
+        return "CryptoSheep";
     }
 
     function symbol() external pure returns (string memory _symbol) {
@@ -129,7 +129,7 @@ contract SheepContract is SheepPasture, ERC721, ERC721Metadata {
     }
 
     function tokenURI(uint256 _tokenId) external view returns (string memory) {
-        Sheep memory sheep = sheeps[_tokenId];
+        Sheep memory sheep = allSheep[_tokenId];
 
         string memory svgData = getSheepSVG(_tokenId);
         string memory status = checkIsAlive(sheep) ? "Alive" : "Dead";

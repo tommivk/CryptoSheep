@@ -19,7 +19,7 @@ import ErrorPage from "./components/ErrorPage";
 import Loading from "./components/Loading";
 
 const App = () => {
-  const [ownedSheeps, setOwnedSheeps] = useState<Array<Sheep>>();
+  const [ownedSheep, setOwnedSheep] = useState<Array<Sheep>>();
   const [sheepFetchError, setSheepFetchError] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
   const [notification, setNotification] = useState<
@@ -67,14 +67,14 @@ const App = () => {
     return () => subscription.unsubscribe();
   }, [account, contract]);
 
-  const getSheeps = useCallback(async () => {
+  const getSheep = useCallback(async () => {
     if (!contract) return;
     if (!account) {
-      return setOwnedSheeps(undefined);
+      return setOwnedSheep(undefined);
     }
     try {
       const sheepIds = await contract.methods
-        .getOwnedSheeps()
+        .getOwnedSheep()
         .call({ from: account });
 
       const result =
@@ -84,7 +84,7 @@ const App = () => {
           })
         )) as Array<Sheep>) ?? [];
 
-      setOwnedSheeps(result);
+      setOwnedSheep(result);
       setSheepFetchError(false);
     } catch (error) {
       console.error(error);
@@ -93,8 +93,8 @@ const App = () => {
   }, [account, contract]);
 
   useEffect(() => {
-    getSheeps();
-  }, [getSheeps, account, contract, blockData?.blockNumber]);
+    getSheep();
+  }, [getSheep, account, contract, blockData?.blockNumber]);
 
   const toggleDarkMode = () => {
     document.body.classList.toggle("dark", !darkMode);
@@ -188,7 +188,7 @@ const App = () => {
         />
         <Route
           path="/sheep"
-          element={<SheepList sheeps={ownedSheeps} account={account} />}
+          element={<SheepList sheep={ownedSheep} account={account} />}
         />
         <Route
           path="/search"

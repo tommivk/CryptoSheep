@@ -4,34 +4,34 @@ import { Link } from "react-router-dom";
 import Loading from "./Loading";
 
 type Props = {
-  sheeps: Array<Sheep> | undefined;
+  sheep: Array<Sheep> | undefined;
   account: string | undefined;
 };
 
-const SheepList = ({ sheeps, account }: Props) => {
+const SheepList = ({ sheep, account }: Props) => {
   if (!account) {
     return (
       <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-        Connect your wallet to view your sheeps
+        Connect your wallet to view your sheep
       </div>
     );
   }
 
-  if (!sheeps) {
+  if (!sheep) {
     return <Loading />;
   }
 
   return (
     <div className=" max-w-[90vw] m-auto">
-      <h1 className="text-center text-3xl mb-10 mt-2">My sheeps</h1>
-      {sheeps.length === 0 && (
+      <h1 className="text-center text-3xl mb-10 mt-2">My sheep</h1>
+      {sheep.length === 0 && (
         <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-          You don't own any sheeps
+          You don't own any sheep
         </div>
       )}
       <div className="flex flex-wrap justify-center">
         {account &&
-          sheeps.map((sheep: Sheep) => (
+          sheep.map((sheep: Sheep) => (
             <Link
               to={`/sheep/${sheep.id}`}
               key={sheep.id}

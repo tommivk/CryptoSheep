@@ -34,7 +34,7 @@ const SheepSearch = ({ contract, account, blockData }: Props) => {
 
   return (
     <div className="pb-20">
-      <h1 className="text-2xl text-center mt-10 mb-10">Search sheeps by ID</h1>
+      <h1 className="text-2xl text-center mt-10 mb-10">Search sheep by ID</h1>
       <div className="mb-10 flex justify-center mx-5">
         <input
           type="number"

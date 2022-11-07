@@ -17,7 +17,7 @@ contract SheepPasture is SheepSVG {
         uint32 timesFed;
     }
 
-    Sheep[] public sheeps;
+    Sheep[] public allSheep;
 
     mapping(uint => address) public sheepToOwner;
     mapping(address => uint) public ownerSheepCount;
@@ -36,7 +36,7 @@ contract SheepPasture is SheepSVG {
     }
 
     function totalSheepCount() public view returns (uint) {
-        return sheeps.length;
+        return allSheep.length;
     }
 
     event NewSheep(address indexed _owner, uint32 _sheepId, string _name);
@@ -56,8 +56,8 @@ contract SheepPasture is SheepSVG {
         }
         require(validColor, "Invalid color");
 
-        uint32 sheepId = uint32(sheeps.length);
-        sheeps.push(
+        uint32 sheepId = uint32(allSheep.length);
+        allSheep.push(
             Sheep(sheepId, _name, _color, 1, uint64(block.timestamp), 0)
         );
         sheepToOwner[sheepId] = msg.sender;
@@ -72,7 +72,7 @@ contract SheepPasture is SheepSVG {
     }
 
     function feed(uint _sheepId) public onlySheepOwner(_sheepId) {
-        Sheep storage sheep = sheeps[_sheepId];
+        Sheep storage sheep = allSheep[_sheepId];
 
         require(
             ((block.timestamp - sheep.lastFeedTime) > feedingUnlock) ||
@@ -92,8 +92,8 @@ contract SheepPasture is SheepSVG {
     }
 
     function getSheepSVG(uint _sheepId) public view returns (string memory) {
-        require(_sheepId < sheeps.length);
-        Sheep memory sheep = sheeps[_sheepId];
+        require(_sheepId < allSheep.length);
+        Sheep memory sheep = allSheep[_sheepId];
 
         if ((block.timestamp - sheep.lastFeedTime) < 1 days) {
             return
@@ -145,7 +145,7 @@ contract SheepPasture is SheepSVG {
         view
         returns (SheepResponse memory)
     {
-        Sheep memory sheep = sheeps[_sheepId];
+        Sheep memory sheep = allSheep[_sheepId];
         SheepResponse memory sheepData;
 
         sheepData.id = sheep.id;
@@ -161,13 +161,13 @@ contract SheepPasture is SheepSVG {
         return sheepData;
     }
 
-    function getOwnedSheeps() public view returns (uint[] memory) {
+    function getOwnedSheep() public view returns (uint[] memory) {
         uint sheepCount = ownerSheepCount[msg.sender];
         uint[] memory result = new uint[](sheepCount);
 
         uint index = 0;
 
-        for (uint i = 0; i < sheeps.length; i++) {
+        for (uint i = 0; i < allSheep.length; i++) {
             if (sheepToOwner[i] == msg.sender) {
                 result[index] = i;
                 index++;
