@@ -247,6 +247,25 @@ describe("Sheep tests", () => {
     expect(sheepTwo.timesFed).to.equal(0);
     expect(sheepTwo.isAlive).to.equal(true);
   });
+
+  it("Contract owner should be set to contract deployer", async () => {
+    const [accountA] = await ethers.getSigners();
+
+    const owner = await contract.owner();
+    expect(owner).to.equal(accountA.address);
+  });
+
+  it("Only owner should be able to change contract ownership", async () => {
+    const [accountA, accountB, accountC] = await ethers.getSigners();
+
+    await expect(
+      contract.connect(accountB).transferOwnership(accountC.address)
+    ).to.be.revertedWith("Ownable: caller is not the owner");
+
+    await contract.connect(accountA).transferOwnership(accountB.address);
+    const owner = await contract.owner();
+    expect(owner).to.equal(accountB.address);
+  });
 });
 
 const increaseTime = async (seconds: number) => {
