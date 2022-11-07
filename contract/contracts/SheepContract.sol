@@ -10,8 +10,9 @@ import "./ERC721Metadata.sol";
 import "./Base64.sol";
 
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract SheepContract is SheepPasture, ERC721, ERC721Metadata {
+contract SheepContract is SheepPasture, ERC721, ERC721Metadata, Ownable {
     mapping(uint => address) approvals;
     mapping(address => mapping(address => bool)) authorized;
 
