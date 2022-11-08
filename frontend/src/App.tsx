@@ -68,7 +68,7 @@ const App = () => {
   }, [account, contract]);
 
   const getSheep = useCallback(async () => {
-    if (!contract) return;
+    if (!contract || wrongNetworkError) return;
     if (!account) {
       return setOwnedSheep(undefined);
     }
@@ -90,7 +90,7 @@ const App = () => {
       console.error(error);
       setSheepFetchError(true);
     }
-  }, [account, contract]);
+  }, [account, contract, wrongNetworkError]);
 
   useEffect(() => {
     getSheep();
