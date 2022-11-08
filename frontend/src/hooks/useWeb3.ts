@@ -131,7 +131,7 @@ const useWeb3 = ({ handleNotification }: Props) => {
   const handleChainChange = async (chainId: string) => {
     const accounts = await connectedAccounts();
     if (accounts.length === 0) return;
-    if (Number(chainId) !== GOERLI_NETWORK_ID) {
+    if (chainId.substring(2) !== GOERLI_NETWORK_ID.toString(16)) {
       promptChainChange();
       setWrongNetworkError(true);
       return;
