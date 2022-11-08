@@ -6,7 +6,7 @@ import Navigation from "./components/Navigation";
 import useBlockData from "./hooks/useBlockData";
 import useBalance from "./hooks/useBalance";
 import useWeb3 from "./hooks/useWeb3";
-import useContract from "./hooks/useContract";
+import useContractState from "./hooks/useContractState";
 import useAccount from "./hooks/useAccount";
 import { NotificationMessage, Sheep } from "./types";
 import { EventData } from "web3-eth-contract";
@@ -40,11 +40,11 @@ const App = () => {
     setNotification({ message: message, type });
   };
 
-  const [web3, wrongNetworkError, connectWallet, web3Error] = useWeb3({
-    handleNotification,
-  });
+  const [web3, contract, connectWallet, wrongNetworkError, web3Error] = useWeb3(
+    { handleNotification }
+  );
   const [account, accountError] = useAccount({ web3 });
-  const [contract, contractState, contractError] = useContract({ web3 });
+  const [contractState, contractStateError] = useContractState({ contract });
   const [blockData, blockDataError] = useBlockData(web3);
   const [balance] = useBalance({ account, web3, blockData });
 
@@ -106,7 +106,7 @@ const App = () => {
     web3Error ||
     accountError ||
     blockDataError ||
-    contractError;
+    contractStateError;
 
   if (error) {
     return (
