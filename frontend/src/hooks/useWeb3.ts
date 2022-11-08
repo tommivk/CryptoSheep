@@ -94,15 +94,26 @@ const useWeb3 = ({ handleNotification }: Props) => {
     }
   };
 
+  const handleChainChange = async (chainId: string) => {
+    const accounts = await connectedAccounts();
+    if (accounts.length === 0) return;
+    if (Number(chainId) !== GOERLI_NETWORK_ID) {
+      promptChainChange();
+      setWrongNetworkError(true);
+      return;
+    }
+    connectGivenProvider();
+  };
+
   useEffect(() => {
     initialize();
 
     window?.ethereum?.on("accountsChanged", checkDisconnect);
-    window?.ethereum?.on("chainChanged", initialize);
+    window?.ethereum?.on("chainChanged", handleChainChange);
 
     return () => {
       window?.ethereum?.removeListener("accountsChanged", checkDisconnect);
-      window?.ethereum?.removeListener("chainChanged", initialize);
+      window?.ethereum?.removeListener("chainChanged", handleChainChange);
     };
   }, [initialize]);
 
