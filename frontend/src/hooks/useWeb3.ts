@@ -45,12 +45,6 @@ const useWeb3 = ({ handleNotification }: Props) => {
 
         await window.ethereum.request({ method: "eth_requestAccounts" });
         setWeb3(web3);
-
-        const correctNetwork = await isCorrectNetwork(web3);
-        if (!correctNetwork) {
-          setWrongNetworkError(true);
-          await promptChainChange();
-        }
         await updateContract(web3);
       } catch (error) {
         console.error(error);
