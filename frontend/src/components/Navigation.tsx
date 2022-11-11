@@ -50,13 +50,22 @@ const Navigation = ({
         </Link>
 
         <li className="hidden lg:inline-block ml-auto mr-20 font-medium">
-          <Link to="/">Mint</Link>
+          <Link to="/" className="relative group hover:text-gray-400">
+            Mint
+            <div className="top-8 absolute bg-blue-300 h-0 w-[100%] group-hover:animate-fill"></div>
+          </Link>
         </li>
         <li className="hidden lg:inline-block mr-20 font-medium">
-          <Link to="/search">Search</Link>
+          <Link to="/search" className="relative group hover:text-gray-400">
+            Search
+            <div className="top-8 absolute bg-blue-300 h-0 w-[100%] group-hover:animate-fill"></div>
+          </Link>
         </li>
         <li className="hidden lg:inline-block mr-auto font-medium">
-          <Link to="/sheep">My sheep</Link>
+          <Link to="/sheep" className="relative group hover:text-gray-400">
+            My sheep
+            <div className="top-8 absolute bg-blue-300 h-0 w-[100%] group-hover:animate-fill"></div>
+          </Link>
         </li>
         <li className="hidden lg:inline-block min-w-[220px]">
           <Menu>

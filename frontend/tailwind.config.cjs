@@ -34,12 +34,17 @@ module.exports = {
           '10%': {transform: 'translate(0,0)'},
           '90%': { transform: 'translateX(-100vw)' },
           '100%': { transform: 'translateX(-100vw)' },
+        },
+        fill: {
+          '0%': {height: 2, transform: "scaleX(0)"},
+          '100%': {height: 2, transform: "scaleX(1.2)"}
         }
       },
       animation: {
         moveOut: 'moveOut 5s forwards',
         moveLeft: 'moveLeft 2s forwards ease-out',
         jump: 'jump 4s forwards',
+        fill: 'fill 0.5s forwards ease-out'
       }
     },
   },
