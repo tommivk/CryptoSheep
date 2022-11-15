@@ -35,7 +35,7 @@ const SheepList = ({ sheep, account }: Props) => {
             <Link
               to={`/sheep/${sheep.id}`}
               key={sheep.id}
-              className="mb-4 mx-2"
+              className="mb-4 mx-3"
             >
               <SheepCard sheep={sheep} />
             </Link>
