@@ -44,7 +44,7 @@ module.exports = {
         moveOut: 'moveOut 5s forwards',
         moveLeft: 'moveLeft 2s forwards ease-out',
         jump: 'jump 4s forwards',
-        fill: 'fill 0.5s forwards ease-out'
+        fill: 'fill 0.4s forwards ease-out'
       }
     },
   },
