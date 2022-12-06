@@ -35,6 +35,11 @@ npx hardhat node
 ```
 npm run deploy
 ```
+### Deploying contracts to Goerli testnet
+#### Deploy contracts
+```
+npx hardhat run scripts/deploy.ts --network goerli
+```
 
 ## Frontend
 #### Install dependencies
